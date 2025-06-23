@@ -4,6 +4,7 @@
     <title>Interactive LGA Venues Chart</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="encoded_data.js"></script>
+    <script src="security.js" defer></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; }
         .container { max-width: 1400px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
@@ -15,7 +16,7 @@
         .controls button:hover { background-color: #45a049; }
     </style>
 </head>
-<body>
+<body data-secure="true">
     <div class="container">
         <h1>LGA League Table: Number of Venues</h1>
         <div class="controls">

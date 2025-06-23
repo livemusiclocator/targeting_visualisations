@@ -188,14 +188,31 @@
         // Combine data sources
         const revPopDecoded = atob(encodedData['updated_revpop.csv']);
         const revPopData = Plotly.d3.csv.parse(revPopDecoded);
-        
-        const combinedData = lgaData.map(lga => {
-            const popInfo = revPopData.find(p => p['LGA Name'].replace(/ Council| City| Shire| Rural/g, '').trim() === lga.LGA.replace(/ Council| City| Shire| Rural/g, '').trim());
-            return {
-                ...lga,
-                Population: popInfo ? popInfo.Population : 0
-            };
-        });
+
+        // --- Data Merging Function ---
+        function combineData(lgaStats, populationStats) {
+            // Create a lookup map from the population data for efficient searching.
+            // Normalize LGA names to handle variations like "City", "Shire", etc.
+            const populationMap = new Map();
+            populationStats.forEach(p => {
+                const normalizedName = p['LGA Name'].replace(/ \(.+\)/, '').trim();
+                if (p.Population && !populationMap.has(normalizedName)) {
+                    populationMap.set(normalizedName, p.Population);
+                }
+            });
+
+            // Map over the primary LGA stats and merge population data.
+            return lgaStats.map(lga => {
+                const normalizedLgaName = lga.LGA.replace(/ \(.+\)/, '').trim();
+                const population = populationMap.get(normalizedLgaName) || 0; // Default to 0 if not found
+                return {
+                    ...lga,
+                    Population: +population,
+                };
+            }).filter(item => item.Population > 0); // Filter out entries with no population data
+        }
+
+        const combinedData = combineData(lgaData, revPopData);
         
         // --- Initial Call ---
         createPlot(combinedData);
