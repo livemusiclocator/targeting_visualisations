@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Venue Analysis Dashboard</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        .container {
+            max-width: 960px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .visualization-list {
+            list-style: none;
+            padding: 0;
+        }
+        .visualization-item {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            transition: box-shadow 0.2s ease-in-out;
+        }
+        .visualization-item:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        .visualization-item a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+        .visualization-item a:hover {
+            text-decoration: underline;
+        }
+        .visualization-item p {
+            margin: 1rem 0 0;
+            color: #6c757d;
+        }
+        .description-list {
+            margin-top: 0.5rem;
+            padding-left: 1.5rem;
+            color: #495057;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Music Venue Analysis Dashboard</h1>
+    </header>
+
+    <div class="container">
+        <ul class="visualization-list">
+            <li class="visualization-item" id="interactive-lga-venues">
+                <a href="interactive_lga_venues_chart.html" target="_blank">Interactive LGA Venues Chart</a>
+                <p>This interactive bar chart displays the number of music venues for each Local Government Area (LGA). It is designed for easy exploration and comparison.</p>
+                <ul class="description-list">
+                    <li><b>Y-Axis:</b> Local Government Area (LGA) name.</li>
+                    <li><b>X-Axis:</b> The total number of unique music venues recorded in that LGA.</li>
+                    <li><b>Interaction:</b> Use the filter controls at the top to display only the LGAs that fall within a specified range of venue counts (Min to Max). Click "Apply Filter" to update the chart.</li>
+                </ul>
+            </li>
+
+            <li class="visualization-item" id="interactive-tourism-venues">
+                <a href="interactive_tourism_venues_chart.html" target="_blank">Interactive Tourism Venues Chart</a>
+                <p>This chart is similar to the one above but aggregates the data by Tourism Region instead of LGA, providing a broader geographical perspective.</p>
+                <ul class="description-list">
+                    <li><b>Y-Axis:</b> Tourism Region name.</li>
+                    <li><b>X-Axis:</b> The total number of unique music venues recorded in that Tourism Region.</li>
+                    <li><b>Interaction:</b> Use the filter controls to show only the regions with a venue count within your specified range. Click "Apply Filter" to see the results.</li>
+                </ul>
+            </li>
+
+            <li class="visualization-item" id="lga-revenue-venues">
+                <a href="lga_revenue_venues_chart.html" target="_blank">LGA Revenue vs. Venues Bubble Chart</a>
+                <p>This interactive bubble chart explores the relationship between an LGA's financial resources and its number of music venues. The size and color of the bubbles provide additional layers of information.</p>
+                <ul class="description-list">
+                    <li><b>Y-Axis:</b> Council Revenue in millions of Australian dollars (AUD).</li>
+                    <li><b>X-Axis:</b> The total number of unique music venues in the LGA.</li>
+                    <li><b>Bubble Size:</b> Represents the total combined capacity of all venues in the LGA. Larger bubbles indicate a higher total capacity.</li>
+                    <li><b>Bubble Color:</b> Represents the average venue capacity in that LGA, with a new "Plasma" color scale.</li>
+                    <li><b>Interaction:</b> Hover your mouse over any bubble to see a detailed tooltip with specific data for that LGA. Use the dropdown menu to select and highlight a specific LGA with a bright magenta circle.</li>
+                </ul>
+            </li>
+
+            <li class="visualization-item" id="lga-revenue-population">
+                <a href="lga_revenue_population.html" target="_blank">LGA Revenue vs. Population Bubble Chart</a>
+                <p>This chart examines the relationship between an LGA's council revenue and its population size, with bubble size indicating the number of venues.</p>
+                <ul class="description-list">
+                    <li><b>Y-Axis:</b> Council revenue in millions of Australian dollars (AUD).</li>
+                    <li><b>X-Axis:</b> Population of the LGA.</li>
+                    <li><b>Bubble Size:</b> Represents the number of music venues in the LGA. Larger bubbles mean more venues.</li>
+                    <li><b>Interaction:</b> This is a static chart for direct comparison.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <footer>
+        <p>Project for analysis of music venues. All data is for demonstration purposes.</p>
+    </footer>
+
+</body>
+</html>

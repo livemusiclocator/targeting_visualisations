@@ -1,0 +1,370 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LGA Music Venue Analysis</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f0f0ff;
+            border-radius: 8px;
+            border: 2px solid #ccccff;
+        }
+        select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #aaa;
+            font-size: 14px;
+            min-width: 300px;
+            background-color: #fff;
+        }
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        .highlight-info {
+            font-style: italic;
+            margin-top: 10px;
+            color: #555;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive LGA Music Venue Analysis</h1>
+        <div class="controls">
+            <label for="lga-select">Select LGA to Highlight:</label>
+            <select id="lga-select">
+                <option value="all">-- All LGAs --</option>
+                <option value="Alpine Shire Council">Alpine Shire Council</option>
+                <option value="Ararat Rural City Council">Ararat Rural City Council</option>
+                <option value="Ballarat City Council">Ballarat City Council</option>
+                <option value="Banyule City Council">Banyule City Council</option>
+                <option value="Bass Coast Shire Council">Bass Coast Shire Council</option>
+                <option value="Baw Baw Shire Council">Baw Baw Shire Council</option>
+                <option value="Bayside City Council">Bayside City Council</option>
+                <option value="Benalla Rural City Council">Benalla Rural City Council</option>
+                <option value="Boroondara City Council">Boroondara City Council</option>
+                <option value="Brimbank City Council">Brimbank City Council</option>
+                <option value="Buloke Shire Council">Buloke Shire Council</option>
+                <option value="Campaspe Shire Council">Campaspe Shire Council</option>
+                <option value="Cardinia Shire Council">Cardinia Shire Council</option>
+                <option value="Casey City Council">Casey City Council</option>
+                <option value="Central Goldfields Shire Council">Central Goldfields Shire Council</option>
+                <option value="Colac-Otway Shire Council">Colac-Otway Shire Council</option>
+                <option value="Corangamite Shire Council">Corangamite Shire Council</option>
+                <option value="Darebin City Council">Darebin City Council</option>
+                <option value="East Gippsland Shire Council">East Gippsland Shire Council</option>
+                <option value="Frankston City Council">Frankston City Council</option>
+                <option value="Gannawarra Shire Council">Gannawarra Shire Council</option>
+                <option value="Glen Eira City Council">Glen Eira City Council</option>
+                <option value="Glenelg Shire Council">Glenelg Shire Council</option>
+                <option value="Golden Plains Shire Council">Golden Plains Shire Council</option>
+                <option value="Greater Bendigo City Council">Greater Bendigo City Council</option>
+                <option value="Greater Dandenong City Council">Greater Dandenong City Council</option>
+                <option value="Greater Geelong City Council">Greater Geelong City Council</option>
+                <option value="Greater Shepparton City Council">Greater Shepparton City Council</option>
+                <option value="Hepburn Shire Council">Hepburn Shire Council</option>
+                <option value="Hindmarsh Shire Council">Hindmarsh Shire Council</option>
+                <option value="Hobsons Bay City Council">Hobsons Bay City Council</option>
+                <option value="Horsham Rural City Council">Horsham Rural City Council</option>
+                <option value="Hume City Council">Hume City Council</option>
+                <option value="Indigo Shire Council">Indigo Shire Council</option>
+                <option value="Kingston City Council">Kingston City Council</option>
+                <option value="Knox City Council">Knox City Council</option>
+                <option value="Latrobe City Council">Latrobe City Council</option>
+                <option value="Loddon Shire Council">Loddon Shire Council</option>
+                <option value="Macedon Ranges Shire Council">Macedon Ranges Shire Council</option>
+                <option value="Manningham City Council">Manningham City Council</option>
+                <option value="Mansfield Shire Council">Mansfield Shire Council</option>
+                <option value="Maribyrnong City Council">Maribyrnong City Council</option>
+                <option value="Maroondah City Council">Maroondah City Council</option>
+                <option value="Melbourne City Council">Melbourne City Council</option>
+                <option value="Melton City Council">Melton City Council</option>
+                <option value="Merri-Bek City Council">Merri-Bek City Council</option>
+                <option value="Mildura Rural City Council">Mildura Rural City Council</option>
+                <option value="Mitchell Shire Council">Mitchell Shire Council</option>
+                <option value="Moira Shire Council">Moira Shire Council</option>
+                <option value="Monash City Council">Monash City Council</option>
+                <option value="Moonee Valley City Council">Moonee Valley City Council</option>
+                <option value="Moorabool Shire Council">Moorabool Shire Council</option>
+                <option value="Mornington Peninsula Shire Council">Mornington Peninsula Shire Council</option>
+                <option value="Mount Alexander Shire Council">Mount Alexander Shire Council</option>
+                <option value="Moyne Shire Council">Moyne Shire Council</option>
+                <option value="Murrindindi Shire Council">Murrindindi Shire Council</option>
+                <option value="Nillumbik Shire Council">Nillumbik Shire Council</option>
+                <option value="Northern Grampians Shire Council">Northern Grampians Shire Council</option>
+                <option value="Port Phillip City Council">Port Phillip City Council</option>
+                <option value="Pyrenees Shire Council">Pyrenees Shire Council</option>
+                <option value="Queenscliffe Borough Council">Queenscliffe Borough Council</option>
+                <option value="South Gippsland Shire Council">South Gippsland Shire Council</option>
+                <option value="Southern Grampians Shire Council">Southern Grampians Shire Council</option>
+                <option value="Stonnington City Council">Stonnington City Council</option>
+                <option value="Strathbogie Shire Council">Strathbogie Shire Council</option>
+                <option value="Surf Coast Shire Council">Surf Coast Shire Council</option>
+                <option value="Swan Hill Rural City Council">Swan Hill Rural City Council</option>
+                <option value="Towong Shire Council">Towong Shire Council</option>
+                <option value="Wangaratta Rural City Council">Wangaratta Rural City Council</option>
+                <option value="Warrnambool City Council">Warrnambool City Council</option>
+                <option value="Wellington Shire Council">Wellington Shire Council</option>
+                <option value="West Wimmera Shire Council">West Wimmera Shire Council</option>
+                <option value="Whitehorse City Council">Whitehorse City Council</option>
+                <option value="Whittlesea City Council">Whittlesea City Council</option>
+                <option value="Wodonga City Council">Wodonga City Council</option>
+                <option value="Wyndham City Council">Wyndham City Council</option>
+                <option value="Yarra City Council">Yarra City Council</option>
+                <option value="Yarra Ranges Shire Council">Yarra Ranges Shire Council</option>
+                <option value="Yarriambiack Shire Council">Yarriambiack Shire Council</option>
+            </select>
+            <button id="highlight-btn">Highlight Selected LGA</button>
+            <div class="highlight-info">
+                When an LGA is selected, it will be highlighted with a bright red bubble while others are dimmed.
+                Hover over any bubble to see detailed information.
+            </div>
+        </div>
+        <div id="chart" style="width: 100%; height: 800px;"></div>
+    </div>
+
+    <script>
+        // Data for the plot
+        const lgas = ['Alpine Shire Council', 'Ararat Rural City Council', 'Ballarat City Council', 'Banyule City Council', 'Bass Coast Shire Council', 'Baw Baw Shire Council', 'Bayside City Council', 'Benalla Rural City Council', 'Boroondara City Council', 'Brimbank City Council', 'Buloke Shire Council', 'Campaspe Shire Council', 'Cardinia Shire Council', 'Casey City Council', 'Central Goldfields Shire Council', 'Colac-Otway Shire Council', 'Corangamite Shire Council', 'Darebin City Council', 'East Gippsland Shire Council', 'Frankston City Council', 'Gannawarra Shire Council', 'Glen Eira City Council', 'Glenelg Shire Council', 'Golden Plains Shire Council', 'Greater Bendigo City Council', 'Greater Dandenong City Council', 'Greater Geelong City Council', 'Greater Shepparton City Council', 'Hepburn Shire Council', 'Hindmarsh Shire Council', 'Hobsons Bay City Council', 'Horsham Rural City Council', 'Hume City Council', 'Indigo Shire Council', 'Kingston City Council', 'Knox City Council', 'Latrobe City Council', 'Loddon Shire Council', 'Macedon Ranges Shire Council', 'Manningham City Council', 'Mansfield Shire Council', 'Maribyrnong City Council', 'Maroondah City Council', 'Melbourne City Council', 'Melton City Council', 'Merri-Bek City Council', 'Mildura Rural City Council', 'Mitchell Shire Council', 'Moira Shire Council', 'Monash City Council', 'Moonee Valley City Council', 'Moorabool Shire Council', 'Mornington Peninsula Shire Council', 'Mount Alexander Shire Council', 'Moyne Shire Council', 'Murrindindi Shire Council', 'Nillumbik Shire Council', 'Northern Grampians Shire Council', 'Port Phillip City Council', 'Pyrenees Shire Council', 'Queenscliffe Borough Council', 'South Gippsland Shire Council', 'Southern Grampians Shire Council', 'Stonnington City Council', 'Strathbogie Shire Council', 'Surf Coast Shire Council', 'Swan Hill Rural City Council', 'Towong Shire Council', 'Wangaratta Rural City Council', 'Warrnambool City Council', 'Wellington Shire Council', 'West Wimmera Shire Council', 'Whitehorse City Council', 'Whittlesea City Council', 'Wodonga City Council', 'Wyndham City Council', 'Yarra City Council', 'Yarra Ranges Shire Council', 'Yarriambiack Shire Council'];
+        const venueCount = [30, 8, 71, 17, 38, 34, 29, 3, 16, 26, 16, 37, 26, 14, 7, 19, 15, 63, 51, 21, 8, 24, 21, 6, 80, 17, 132, 30, 20, 8, 30, 18, 19, 16, 36, 23, 39, 12, 26, 15, 19, 41, 19, 230, 5, 76, 27, 22, 20, 26, 33, 17, 83, 20, 19, 15, 11, 15, 91, 11, 9, 23, 16, 82, 12, 28, 10, 9, 5, 16, 30, 3, 14, 11, 10, 23, 141, 70, 8];
+        const avgFreq = [1.9833333333333334, 0.35, 2.1253521126760564, 1.6764705882352942, 1.5815789473684212, 1.1029411764705883, 1.396551724137931, 0.06666666666666667, 2.29375, 1.0961538461538463, 0.3125, 1.8918918918918919, 1.2576923076923079, 1.3214285714285714, 1.5714285714285714, 1.9789473684210528, 1.1333333333333333, 3.86031746031746, 0.7313725490196078, 3.0571428571428574, 0.825, 1.4416666666666667, 1.2476190476190476, 0.39999999999999997, 2.295, 1.0588235294117647, 1.837878787878788, 1.7666666666666666, 1.55, 0.4625, 2.49, 0.8833333333333333, 1.894736842105263, 1.36875, 1.213888888888889, 2.3304347826086955, 1.3025641025641026, 1.2750000000000001, 0.7230769230769231, 0.43333333333333335, 1.3789473684210527, 2.1609756097560973, 3.473684210526316, 3.000434782608696, 2.2, 3.9921052631578946, 2.088888888888889, 1.1681818181818182, 0.915, 1.1615384615384614, 2.003030303030303, 1.7294117647058822, 1.7072289156626506, 2.71, 1.5, 3.2666666666666666, 3.790909090909091, 0.48666666666666664, 3.3000000000000003, 0.8545454545454546, 1.0555555555555556, 0.8347826086956521, 0.63125, 3.381707317073171, 0.20833333333333334, 2.0535714285714284, 1.5000000000000002, 2.466666666666667, 3.2, 2.725, 1.3533333333333333, 0.39999999999999997, 1.1357142857142857, 2.036363636363636, 3.13, 1.7695652173913046, 3.9553191489361703, 1.6600000000000001, 1.3];
+        const totalCapacity = [6856.0, 2607.0, 18514.0, 5474.0, 8139.0, 9711.0, 5004.0, 500.0, 5220.0, 11442.0, 1846.0, 6740.0, 7411.0, 8198.0, 2771.0, 3786.0, 3050.0, 22212.0, 9423.0, 8689.0, 1477.0, 6998.0, 3677.0, 326.0, 23164.0, 7866.0, 45204.0, 6170.0, 7929.0, 1072.0, 8353.0, 4680.0, 5596.0, 6015.0, 7879.0, 12418.0, 13955.0, 1869.0, 5464.0, 4931.0, 6359.0, 10069.0, 7375.0, 168257.0, 1417.0, 18882.0, 7344.0, 5517.0, 4679.0, 11858.0, 8885.0, 2619.0, 30239.0, 2603.0, 2983.0, 3833.0, 2533.0, 2050.0, 29627.0, 1318.0, 830.0, 3581.0, 2771.0, 19956.0, 2235.0, 11173.0, 3568.0, 1736.0, 453.0, 5996.0, 6087.0, 618.0, 8372.0, 6956.0, 3780.0, 8796.0, 32841.0, 25151.0, 1062.0];
+        const avgCapacity = [228.53333333333333, 325.875, 260.76056338028167, 322.0, 214.18421052631578, 285.61764705882354, 172.55172413793105, 166.66666666666666, 326.25, 440.0769230769231, 115.375, 182.16216216216216, 285.03846153846155, 585.5714285714286, 395.85714285714283, 199.26315789473685, 203.33333333333334, 352.57142857142856, 184.76470588235293, 413.76190476190476, 184.625, 291.5833333333333, 175.0952380952381, 54.333333333333336, 289.55, 462.70588235294116, 342.45454545454544, 205.66666666666666, 396.45, 134.0, 278.43333333333334, 260.0, 294.5263157894737, 375.9375, 218.86111111111111, 539.9130434782609, 357.8205128205128, 155.75, 210.15384615384616, 328.73333333333335, 334.6842105263158, 245.58536585365854, 388.1578947368421, 731.5521739130435, 283.4, 248.44736842105263, 272.0, 250.77272727272728, 233.95, 456.0769230769231, 269.24242424242425, 154.05882352941177, 364.32530120481925, 130.15, 157.0, 255.53333333333333, 230.27272727272728, 136.66666666666666, 325.57142857142856, 119.81818181818181, 92.22222222222223, 155.69565217391303, 173.1875, 243.3658536585366, 186.25, 399.0357142857143, 356.8, 192.88888888888889, 90.6, 374.75, 202.9, 206.0, 598.0, 632.3636363636364, 378.0, 382.4347826086956, 232.91489361702128, 359.3, 132.75];
+        const freqMode = ['Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'No Data', 'Hosts functions', 'Hosts functions', 'Less than 1 a month', 'Less than 1 a month', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'No Data', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Less than 1 a month', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'No Data', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', '1 or more a week', '1 or more a week', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Less than 1 a month', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Less than 1 a month', 'Hosts functions', 'Hosts functions', '1 or more a week', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Less than 1 a month', 'Hosts functions', 'Less than 1 a month', 'Hosts functions', 'No Data', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Less than 1 a month', 'Hosts functions', 'Hosts functions', 'Hosts functions', 'Hosts functions'];
+        const avgFrequencyLine = 1.7123354937566047;
+        
+        // Create the data with custom hover text
+        function createHoverText(i) {
+            return `<b>${lgas[i]}</b><br>` +
+                   `Venues: ${venueCount[i]}<br>` +
+                   `Most common frequency: ${freqMode[i]}<br>` +
+                   `Avg frequency: ${avgFreq[i].toFixed(2)} gigs/month<br>` +
+                   `Total capacity: ${Math.round(totalCapacity[i])}<br>` +
+                   `Avg capacity: ${Math.round(avgCapacity[i])}`;
+        }
+        
+        // Calculate bubble sizes based on total capacity
+        function calculateSizes(capacities, scaleFactor = 0.25, minSize = 5) {
+            return capacities.map(cap => Math.max(Math.sqrt(cap) * scaleFactor, minSize));
+        }
+        
+        // Function to create the plot with all LGAs
+        function createPlot() {
+            const hoverTexts = [];
+            for (let i = 0; i < lgas.length; i++) {
+                hoverTexts.push(createHoverText(i));
+            }
+            
+            // Calculate sizes based on total capacity
+            const bubbleSizes = calculateSizes(totalCapacity);
+            
+            const trace = {
+                x: venueCount,
+                y: avgFreq,
+                mode: 'markers',
+                type: 'scatter',
+                text: hoverTexts,
+                hoverinfo: 'text',
+                marker: {
+                    size: bubbleSizes,
+                    color: avgCapacity,
+                    colorscale: 'Viridis',
+                    colorbar: {
+                        title: 'Avg Venue<br>Capacity'
+                    },
+                    line: {
+                        width: 1,
+                        color: 'darkgray'
+                    }
+                }
+            };
+            
+            const layout = {
+                title: 'Interactive Bubble Chart: Number of Venues vs. Average Frequency by LGA<br>Bubble Size = Total Venue Capacity',
+                xaxis: {
+                    title: 'Number of Venues per LGA',
+                    gridcolor: 'rgba(200, 200, 200, 0.5)'
+                },
+                yaxis: {
+                    title: 'Average Frequency of Music Presentation (Gigs per Month)',
+                    gridcolor: 'rgba(200, 200, 200, 0.5)'
+                },
+                plot_bgcolor: 'rgba(240, 240, 240, 0.5)',
+                hoverlabel: {
+                    bgcolor: 'white',
+                    font: {
+                        family: 'Arial',
+                        size: 12
+                    },
+                    bordercolor: 'gray'
+                },
+                shapes: [{
+                    type: 'line',
+                    x0: 0,
+                    y0: avgFrequencyLine,
+                    x1: Math.max(...venueCount) * 1.05,
+                    y1: avgFrequencyLine,
+                    line: {
+                        color: 'red',
+                        width: 1,
+                        dash: 'dash'
+                    }
+                }],
+                annotations: [{
+                    x: Math.max(...venueCount) * 0.95,
+                    y: avgFrequencyLine * 1.05,
+                    text: `Average frequency: ${avgFrequencyLine.toFixed(2)} gigs/month`,
+                    showarrow: false,
+                    font: {
+                        color: 'red'
+                    }
+                }]
+            };
+            
+            Plotly.newPlot('chart', [trace], layout);
+        }
+        
+        // Function to highlight a specific LGA
+        function highlightLGA(selectedLGA) {
+            if (selectedLGA === 'all') {
+                // Show all LGAs normally
+                createPlot();
+                return;
+            }
+            
+            // Find the index of the selected LGA
+            const lgaIndex = lgas.indexOf(selectedLGA);
+            if (lgaIndex === -1) return;
+            
+            // Create hover texts
+            const hoverTexts = [];
+            const highlightHoverText = createHoverText(lgaIndex);
+            
+            for (let i = 0; i < lgas.length; i++) {
+                hoverTexts.push(createHoverText(i));
+            }
+            
+            // Calculate sizes based on total capacity, but make highlighted one larger
+            const regularSizes = calculateSizes(totalCapacity);
+            const highlightedSizes = [...regularSizes];
+            highlightedSizes[lgaIndex] = Math.max(regularSizes[lgaIndex] * 1.5, 15); // Make highlighted bubble larger
+            
+            // Create a trace for all LGAs
+            const trace = {
+                x: venueCount,
+                y: avgFreq,
+                mode: 'markers',
+                type: 'scatter',
+                text: hoverTexts,
+                hoverinfo: 'text',
+                marker: {
+                    size: highlightedSizes,
+                    color: Array(lgas.length).fill('rgba(100, 100, 100, 0.3)'), // All dimmed
+                    line: {
+                        width: Array(lgas.length).fill(1),
+                        color: Array(lgas.length).fill('darkgray')
+                    }
+                }
+            };
+            
+            // Override properties for the highlighted LGA
+            trace.marker.color[lgaIndex] = 'rgba(255, 0, 0, 1)'; // Bright red
+            trace.marker.line.width[lgaIndex] = 3;
+            trace.marker.line.color[lgaIndex] = 'black';
+            
+            const layout = {
+                title: `Interactive Bubble Chart: ${selectedLGA} Highlighted<br>Bubble Size = Total Venue Capacity`,
+                xaxis: {
+                    title: 'Number of Venues per LGA',
+                    gridcolor: 'rgba(200, 200, 200, 0.5)'
+                },
+                yaxis: {
+                    title: 'Average Frequency of Music Presentation (Gigs per Month)',
+                    gridcolor: 'rgba(200, 200, 200, 0.5)'
+                },
+                plot_bgcolor: 'rgba(240, 240, 240, 0.5)',
+                hoverlabel: {
+                    bgcolor: 'white',
+                    font: {
+                        family: 'Arial',
+                        size: 12
+                    },
+                    bordercolor: 'gray'
+                },
+                shapes: [{
+                    type: 'line',
+                    x0: 0,
+                    y0: avgFrequencyLine,
+                    x1: Math.max(...venueCount) * 1.05,
+                    y1: avgFrequencyLine,
+                    line: {
+                        color: 'red',
+                        width: 1,
+                        dash: 'dash'
+                    }
+                }],
+                annotations: [{
+                    x: Math.max(...venueCount) * 0.95,
+                    y: avgFrequencyLine * 1.05,
+                    text: `Average frequency: ${avgFrequencyLine.toFixed(2)} gigs/month`,
+                    showarrow: false,
+                    font: {
+                        color: 'red'
+                    }
+                }]
+            };
+            
+            Plotly.newPlot('chart', [trace], layout);
+        }
+        
+        // Initialize the plot
+        createPlot();
+        
+        // Handle the highlight button click
+        document.getElementById('highlight-btn').addEventListener('click', function() {
+            const selectedLGA = document.getElementById('lga-select').value;
+            highlightLGA(selectedLGA);
+        });
+        
+        // Also highlight when selecting from dropdown
+        document.getElementById('lga-select').addEventListener('change', function() {
+            const selectedLGA = this.value;
+            highlightLGA(selectedLGA);
+        });
+    </script>
+</body>
+</html>

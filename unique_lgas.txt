@@ -1,0 +1,82 @@
+Total number of unique LGAs: 79
+
+List of unique LGAs in the dataset:
+1. Alpine Shire Council
+2. Ararat Rural City Council
+3. Ballarat City Council
+4. Banyule City Council
+5. Bass Coast Shire Council
+6. Baw Baw Shire Council
+7. Bayside City Council
+8. Benalla Rural City Council
+9. Boroondara City Council
+10. Brimbank City Council
+11. Buloke Shire Council
+12. Campaspe Shire Council
+13. Cardinia Shire Council
+14. Casey City Council
+15. Central Goldfields Shire Council
+16. Colac-Otway Shire Council
+17. Corangamite Shire Council
+18. Darebin City Council
+19. East Gippsland Shire Council
+20. Frankston City Council
+21. Gannawarra Shire Council
+22. Glen Eira City Council
+23. Glenelg Shire Council
+24. Golden Plains Shire Council
+25. Greater Bendigo City Council
+26. Greater Dandenong City Council
+27. Greater Geelong City Council
+28. Greater Shepparton City Council
+29. Hepburn Shire Council
+30. Hindmarsh Shire Council
+31. Hobsons Bay City Council
+32. Horsham Rural City Council
+33. Hume City Council
+34. Indigo Shire Council
+35. Kingston City Council
+36. Knox City Council
+37. Latrobe City Council
+38. Loddon Shire Council
+39. Macedon Ranges Shire Council
+40. Manningham City Council
+41. Mansfield Shire Council
+42. Maribyrnong City Council
+43. Maroondah City Council
+44. Melbourne City Council
+45. Melton City Council
+46. Merri-Bek City Council
+47. Mildura Rural City Council
+48. Mitchell Shire Council
+49. Moira Shire Council
+50. Monash City Council
+51. Moonee Valley City Council
+52. Moorabool Shire Council
+53. Mornington Peninsula Shire Council
+54. Mount Alexander Shire Council
+55. Moyne Shire Council
+56. Murrindindi Shire Council
+57. Nillumbik Shire Council
+58. Northern Grampians Shire Council
+59. Port Phillip City Council
+60. Pyrenees Shire Council
+61. Queenscliffe Borough Council
+62. South Gippsland Shire Council
+63. Southern Grampians Shire Council
+64. Stonnington City Council
+65. Strathbogie Shire Council
+66. Surf Coast Shire Council
+67. Swan Hill Rural City Council
+68. Towong Shire Council
+69. Wangaratta Rural City Council
+70. Warrnambool City Council
+71. Wellington Shire Council
+72. West Wimmera Shire Council
+73. Whitehorse City Council
+74. Whittlesea City Council
+75. Wodonga City Council
+76. Wyndham City Council
+77. Yarra City Council
+78. Yarra Ranges Shire Council
+79. Yarriambiack Shire Council

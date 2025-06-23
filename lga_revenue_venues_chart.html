@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LGA Revenue vs. Venues Analysis</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="encoded_data.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff0f0;
+            border-radius: 8px;
+            border: 2px solid #ffcccc;
+        }
+        select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #aaa;
+            font-size: 14px;
+            min-width: 300px;
+            background-color: #fff;
+        }
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .info-card {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 1px solid #555;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 14px;
+            pointer-events: none;
+            display: none;
+            z-index: 1000;
+            max-width: 300px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive Bubble Chart: LGA Revenue vs. Number of Venues</h1>
+        <div class="controls">
+            <label for="lga-select">Select LGA to Highlight:</label>
+            <select id="lga-select">
+                <option value="all">-- All LGAs --</option>
+            </select>
+        </div>
+        <div id="chart" style="width: 100%; height: 800px; position: relative;"></div>
+        <div id="info-card" class="info-card"></div>
+    </div>
+
+    <script>
+        const chartDiv = document.getElementById('chart');
+        const infoCard = document.getElementById('info-card');
+        const lgaSelect = document.getElementById('lga-select');
+
+        // --- Data Loading and Plotting ---
+        const encodedString = encodedData['lga_interactive_chart_data.csv'];
+        const decodedCsvString = atob(encodedString);
+        const data = Plotly.d3.csv.parse(decodedCsvString);
+
+        // Populate dropdown from loaded data
+        data.forEach(row => {
+            const option = document.createElement('option');
+            option.value = row.lga_name;
+            option.textContent = row.lga_name;
+            lgaSelect.appendChild(option);
+        });
+
+        // Create plot
+        createPlot(data);
+
+        // Add event listener for dropdown
+        lgaSelect.addEventListener('change', function() {
+            updateHighlight(this.value, data);
+        });
+        
+
+        // --- Main Plotting Function ---
+        function createPlot(data) {
+            const trace = {
+                x: data.map(row => +row.venue_count),
+                y: data.map(row => +row.revenue_millions),
+                mode: 'markers',
+                type: 'scatter',
+                customdata: data, // Attach full data row to each point
+                marker: {
+                    size: data.map(row => Math.sqrt(row.total_capacity) / 2.5),
+                    sizemin: 4,
+                    sizemode: 'diameter',
+                    color: data.map(row => +row.avg_capacity),
+                    colorscale: 'Plasma', // New color scale
+                    colorbar: {
+                        title: 'Avg Venue<br>Capacity'
+                    },
+                    line: {
+                        width: 1,
+                        color: 'darkgray'
+                    }
+                },
+                hoverinfo: 'none' // Disable default hover
+            };
+
+            const layout = {
+                title: 'LGA Revenue vs. Number of Venues<br>Bubble Size = Total Venue Capacity',
+                xaxis: { title: 'Number of Venues per LGA', gridcolor: 'rgba(200, 200, 200, 0.5)' },
+                yaxis: { title: 'Council Revenue (Millions of AUD)', gridcolor: 'rgba(200, 200, 200, 0.5)' },
+                plot_bgcolor: 'rgba(240, 240, 240, 0.5)',
+                hovermode: 'closest'
+            };
+
+            Plotly.newPlot(chartDiv, [trace], layout);
+            attachHoverListeners();
+        }
+
+        // --- Event Listener Setup ---
+        function attachHoverListeners() {
+            chartDiv.on('plotly_hover', (eventData) => {
+                const point = eventData.points[0];
+                const pointData = point.customdata;
+                const { clientX, clientY } = eventData.event;
+
+                const hoverText = `<b>${pointData.lga_name}</b><br>` +
+                                  `Venues: ${pointData.venue_count}<br>` +
+                                  `Revenue: $${pointData.revenue_millions}M<br>` +
+                                  `Total Capacity: ${Math.round(pointData.total_capacity)}<br>` +
+                                  `Avg Capacity: ${pointData.avg_capacity}`;
+
+                infoCard.innerHTML = hoverText;
+                infoCard.style.left = (clientX + 15) + 'px';
+                infoCard.style.top = (clientY - 40) + 'px';
+                infoCard.style.display = 'block';
+            });
+
+            chartDiv.on('plotly_unhover', () => {
+                infoCard.style.display = 'none';
+            });
+        }
+        
+        // --- Highlight Update Function ---
+        function updateHighlight(selectedLGA, data) {
+            const highlightColor = '#FF00FF'; // Bright Magenta
+            const highlightSizeMultiplier = 1.8;
+            const highlightLineWidth = 2.5;
+
+            const sizes = [];
+            const colors = [];
+            const opacities = [];
+            const lineWidths = [];
+
+            data.forEach(row => {
+                if (row.lga_name === selectedLGA) {
+                    sizes.push(Math.sqrt(row.total_capacity) / 2.5 * highlightSizeMultiplier);
+                    colors.push(highlightColor);
+                    opacities.push(1.0);
+                    lineWidths.push(highlightLineWidth);
+                } else {
+                    sizes.push(Math.sqrt(row.total_capacity) / 2.5);
+                    colors.push(+row.avg_capacity); // Original color scale value
+                    opacities.push(selectedLGA === 'all' ? 1.0 : 0.3);
+                    lineWidths.push(1);
+                }
+            });
+            
+            Plotly.restyle(chartDiv, {
+                'marker.size': [sizes],
+                'marker.color': [colors],
+                'marker.opacity': [opacities],
+                'marker.line.width': [lineWidths]
+            });
+        }
+
+    </script>
+</body>
+</html>

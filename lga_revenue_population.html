@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LGA Revenue vs Population Analysis</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="encoded_data.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f0f0ff;
+            border-radius: 8px;
+            border: 2px solid #ccccff;
+        }
+        select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #aaa;
+            font-size: 14px;
+            min-width: 300px;
+            background-color: #fff;
+        }
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LGA Revenue vs Population Analysis</h1>
+        <div class="controls">
+            <label for="lga-select">Select LGA to Highlight:</label>
+            <select id="lga-select">
+                <option value="all">-- All LGAs --</option>
+            </select>
+        </div>
+        <div id="chart" style="width: 100%; height: 800px;"></div>
+    </div>
+
+    <script>
+        const chartDiv = document.getElementById('chart');
+        const lgaSelect = document.getElementById('lga-select');
+
+        // --- Data Loading and Processing ---
+        const decodedLgaDataString = atob(encodedData['lga_league_table.csv']);
+        const lgaData = Plotly.d3.csv.parse(decodedLgaDataString);
+        
+        // --- Main Plotting Function ---
+        function createPlot(data) {
+            // Populate dropdown
+            data.forEach(row => {
+                const option = document.createElement('option');
+                option.value = row.LGA;
+                option.textContent = row.LGA;
+                lgaSelect.appendChild(option);
+            });
+            
+            // Prepare data for the plot
+            const population = data.map(r => +r.Population);
+            const revenue = data.map(r => +r['Council Revenue']);
+            const number_of_venues = data.map(r => +r.number_of_venues);
+            const revenuePerCapita = revenue.map((r, i) => population[i] ? r / population[i] : 0);
+            const avgRevenuePerCapita = revenue.reduce((a, b) => a + b, 0) / population.reduce((a, b) => a + b, 0);
+
+            const hoverTexts = data.map(createHoverText);
+            const bubbleSizes = calculateSizes(revenuePerCapita);
+
+            const trace = {
+                x: population,
+                y: revenue,
+                mode: 'markers',
+                type: 'scatter',
+                text: hoverTexts,
+                hoverinfo: 'text',
+                marker: {
+                    size: bubbleSizes,
+                    color: revenuePerCapita,
+                    colorscale: 'Viridis',
+                    colorbar: {
+                        title: 'Revenue<br>Per Capita<br>(AUD)'
+                    },
+                    line: {
+                        width: 1,
+                        color: 'darkgray'
+                    }
+                }
+            };
+            
+            const layout = {
+                title: 'Interactive Bubble Chart: LGA Population vs. Total Revenue<br>Bubble Size = Revenue Per Capita',
+                xaxis: { title: 'Population', gridcolor: 'rgba(200, 200, 200, 0.5)', type: 'log', tickformat: '.0f' },
+                yaxis: { title: 'Total Revenue (AUD)', gridcolor: 'rgba(200, 200, 200, 0.5)', type: 'log', tickformat: '.0f' },
+                plot_bgcolor: 'rgba(240, 240, 240, 0.5)',
+                hoverlabel: { bgcolor: 'white', font: { family: 'Arial', size: 12 }, bordercolor: 'gray' },
+                shapes: [{
+                    type: 'line',
+                    x0: Math.min(...population) * 0.9,
+                    y0: avgRevenuePerCapita * Math.min(...population) * 0.9,
+                    x1: Math.max(...population) * 1.1,
+                    y1: avgRevenuePerCapita * Math.max(...population) * 1.1,
+                    line: { color: 'red', width: 1, dash: 'dash' }
+                }],
+                annotations: [{
+                    x: Math.max(...population) * 0.9,
+                    y: avgRevenuePerCapita * Math.max(...population) * 0.9,
+                    text: `Average Revenue Per Capita: $${Math.round(avgRevenuePerCapita).toLocaleString()}`,
+                    showarrow: false,
+                    font: { color: 'red' }
+                }]
+            };
+
+            Plotly.newPlot(chartDiv, [trace], layout);
+        }
+
+        function createHoverText(d) {
+            const formattedRevenue = (+d['Council Revenue']).toLocaleString('en-AU', { style: 'currency', currency: 'AUD', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            const formattedRevenuePerCapita = d.Population > 0 ? (+d['Council Revenue'] / +d.Population).toLocaleString('en-AU', { style: 'currency', currency: 'AUD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) : 'N/A';
+            return `<b>${d.LGA}</b><br>` +
+                   `Population: ${(+d.Population).toLocaleString()}<br>` +
+                   `Total Revenue: ${formattedRevenue}<br>` +
+                   `Revenue Per Capita: ${formattedRevenuePerCapita}`;
+        }
+        
+        function calculateSizes(values, scaleFactor = 20, minSize = 10) {
+            const maxValue = Math.max(...values);
+            return values.map(value => Math.max(Math.sqrt(value / maxValue) * scaleFactor, minSize));
+        }
+
+        // --- Highlight Update Function ---
+        function highlightLGA(selectedLGA, data) {
+            if (selectedLGA === 'all') {
+                createPlot(data);
+                return;
+            }
+            // This function would need to be rewritten like the others to use Plotly.restyle,
+            // but for now, we leave the original logic to preserve functionality
+            const lgaIndex = data.findIndex(row => row.LGA === selectedLGA);
+            if (lgaIndex === -1) return;
+
+            const population = data.map(r => +r.Population);
+            const revenue = data.map(r => +r['Council Revenue']);
+            const revenuePerCapita = revenue.map((r, i) => population[i] ? r / population[i] : 0);
+
+            const hoverTexts = data.map(createHoverText);
+            const regularSizes = calculateSizes(revenuePerCapita);
+            const highlightedSizes = [...regularSizes];
+            highlightedSizes[lgaIndex] = Math.max(regularSizes[lgaIndex] * 1.5, 15);
+
+            const trace = {
+                x: population,
+                y: revenue,
+                mode: 'markers',
+                type: 'scatter',
+                text: hoverTexts,
+                hoverinfo: 'text',
+                marker: {
+                    size: highlightedSizes,
+                    color: Array(data.length).fill('rgba(100, 100, 100, 0.3)'),
+                    line: {
+                        width: Array(data.length).fill(1),
+                        color: Array(data.length).fill('darkgray')
+                    }
+                }
+            };
+            trace.marker.color[lgaIndex] = 'rgba(255, 0, 0, 1)';
+            trace.marker.line.width[lgaIndex] = 3;
+            trace.marker.line.color[lgaIndex] = 'black';
+            
+            const layout = Plotly.d3.select('#chart').layout;
+            Plotly.newPlot(chartDiv, [trace], layout);
+        }
+
+        // Combine data sources
+        const revPopDecoded = atob(encodedData['updated_revpop.csv']);
+        const revPopData = Plotly.d3.csv.parse(revPopDecoded);
+        
+        const combinedData = lgaData.map(lga => {
+            const popInfo = revPopData.find(p => p['LGA Name'].replace(/ Council| City| Shire| Rural/g, '').trim() === lga.LGA.replace(/ Council| City| Shire| Rural/g, '').trim());
+            return {
+                ...lga,
+                Population: popInfo ? popInfo.Population : 0
+            };
+        });
+        
+        // --- Initial Call ---
+        createPlot(combinedData);
+        
+        lgaSelect.addEventListener('change', function() {
+            highlightLGA(this.value, combinedData);
+        });
+
+    </script>
+</body>
+</html>

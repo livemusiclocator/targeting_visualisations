@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Victorian LGA Gig Density vs Revenue Analysis</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f0f0ff;
+            border-radius: 8px;
+            border: 2px solid #ccccff;
+        }
+        select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #aaa;
+            font-size: 14px;
+            min-width: 300px;
+            background-color: #fff;
+        }
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        .highlight-info {
+            font-style: italic;
+            margin-top: 10px;
+            color: #555;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .metrics-selector {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Victorian LGA Gig Density vs Revenue Analysis</h1>
+        <div class="controls">
+            <label for="lga-select">Select LGA to Highlight:</label>
+            <select id="lga-select">
+                <option value="all">-- All LGAs --</option>
+                <option value="Alpine Shire Council">Alpine Shire Council</option>
+                <option value="Ararat Rural City Council">Ararat Rural City Council</option>
+                <option value="Ballarat City Council">Ballarat City Council</option>
+                <option value="Banyule City Council">Banyule City Council</option>
+                <option value="Bass Coast Shire Council">Bass Coast Shire Council</option>
+                <option value="Baw Baw Shire Council">Baw Baw Shire Council</option>
+                <option value="Bayside City Council">Bayside City Council</option>
+                <option value="Benalla Rural City Council">Benalla Rural City Council</option>
+                <option value="Boroondara City Council">Boroondara City Council</option>
+                <option value="Brimbank City Council">Brimbank City Council</option>
+                <option value="Buloke Shire Council">Buloke Shire Council</option>
+                <option value="Campaspe Shire Council">Campaspe Shire Council</option>
+                <option value="Cardinia Shire Council">Cardinia Shire Council</option>
+                <option value="Casey City Council">Casey City Council</option>
+                <option value="Central Goldfields Shire Council">Central Goldfields Shire Council</option>
+                <option value="Colac-Otway Shire Council">Colac-Otway Shire Council</option>
+                <option value="Corangamite Shire Council">Corangamite Shire Council</option>
+                <option value="Darebin City Council">Darebin City Council</option>
+                <option value="East Gippsland Shire Council">East Gippsland Shire Council</option>
+                <option value="Frankston City Council">Frankston City Council</option>
+                <option value="Gannawarra Shire Council">Gannawarra Shire Council</option>
+                <option value="Glen Eira City Council">Glen Eira City Council</option>
+                <option value="Glenelg Shire Council">Glenelg Shire Council</option>
+                <option value="Golden Plains Shire Council">Golden Plains Shire Council</option>
+                <option value="Greater Bendigo City Council">Greater Bendigo City Council</option>
+                <option value="Greater Dandenong City Council">Greater Dandenong City Council</option>
+                <option value="Greater Geelong City Council">Greater Geelong City Council</option>
+                <option value="Greater Shepparton City Council">Greater Shepparton City Council</option>
+                <option value="Hepburn Shire Council">Hepburn Shire Council</option>
+                <option value="Hindmarsh Shire Council">Hindmarsh Shire Council</option>
+                <option value="Hobsons Bay City Council">Hobsons Bay City Council</option>
+                <option value="Horsham Rural City Council">Horsham Rural City Council</option>
+                <option value="Hume City Council">Hume City Council</option>
+                <option value="Indigo Shire Council">Indigo Shire Council</option>
+                <option value="Kingston City Council">Kingston City Council</option>
+                <option value="Knox City Council">Knox City Council</option>
+                <option value="Latrobe City Council">Latrobe City Council</option>
+                <option value="Loddon Shire Council">Loddon Shire Council</option>
+                <option value="Macedon Ranges Shire Council">Macedon Ranges Shire Council</option>
+                <option value="Manningham City Council">Manningham City Council</option>
+                <option value="Mansfield Shire Council">Mansfield Shire Council</option>
+                <option value="Maribyrnong City Council">Maribyrnong City Council</option>
+                <option value="Maroondah City Council">Maroondah City Council</option>
+                <option value="Melbourne City Council">Melbourne City Council</option>
+                <option value="Melton City Council">Melton City Council</option>
+                <option value="Merri-Bek City Council">Merri-Bek City Council</option>
+                <option value="Mildura Rural City Council">Mildura Rural City Council</option>
+                <option value="Mitchell Shire Council">Mitchell Shire Council</option>
+                <option value="Moira Shire Council">Moira Shire Council</option>
+                <option value="Monash City Council">Monash City Council</option>
+                <option value="Moonee Valley City Council">Moonee Valley City Council</option>
+                <option value="Moorabool Shire Council">Moorabool Shire Council</option>
+                <option value="Mornington Peninsula Shire Council">Mornington Peninsula Shire Council</option>
+                <option value="Mount Alexander Shire Council">Mount Alexander Shire Council</option>
+                <option value="Moyne Shire Council">Moyne Shire Council</option>
+                <option value="Murrindindi Shire Council">Murrindindi Shire Council</option>
+                <option value="Nillumbik Shire Council">Nillumbik Shire Council</option>
+                <option value="Northern Grampians Shire Council">Northern Grampians Shire Council</option>
+                <option value="Port Phillip City Council">Port Phillip City Council</option>
+                <option value="Pyrenees Shire Council">Pyrenees Shire Council</option>
+                <option value="Queenscliffe Borough Council">Queenscliffe Borough Council</option>
+                <option value="South Gippsland Shire Council">South Gippsland Shire Council</option>
+                <option value="Southern Grampians Shire Council">Southern Grampians Shire Council</option>
+                <option value="Stonnington City Council">Stonnington City Council</option>
+                <option value="Strathbogie Shire Council">Strathbogie Shire Council</option>
+                <option value="Surf Coast Shire Council">Surf Coast Shire Council</option>
+                <option value="Swan Hill Rural City Council">Swan Hill Rural City Council</option>
+                <option value="Towong Shire Council">Towong Shire Council</option>
+                <option value="Wangaratta Rural City Council">Wangaratta Rural City Council</option>
+                <option value="Warrnambool City Council">Warrnambool City Council</option>
+                <option value="Wellington Shire Council">Wellington Shire Council</option>
+                <option value="West Wimmera Shire Council">West Wimmera Shire Council</option>
+                <option value="Whitehorse City Council">Whitehorse City Council</option>
+                <option value="Whittlesea City Council">Whittlesea City Council</option>
+                <option value="Wodonga City Council">Wodonga City Council</option>
+                <option value="Wyndham City Council">Wyndham City Council</option>
+                <option value="Yarra City Council">Yarra City Council</option>
+                <option value="Yarra Ranges Shire Council">Yarra Ranges Shire Council</option>
+                <option value="Yarriambiack Shire Council">Yarriambiack Shire Council</option>
+            </select>
+            <button id="highlight-btn">Highlight Selected LGA</button>
+            
+            <div class="metrics-selector">
+                <label for="x-metric">X-Axis:</label>
+                <select id="x-metric">
+                    <option value="venues_per_10k">Venues Per 10,000 Population</option>
+                    <option value="frequency_weighted">Frequency-Weighted Venue Density</option>
+                    <option value="gig_density_score">Gig Density Score</option>
+                    <option value="capacity_per_pop">Venue Capacity Per Population</option>
+                    <option value="venue_count">Total Venue Count</option>
+                    <option value="avg_frequency">Average Gig Frequency</option>
+                </select>
+                
+                <label for="y-metric" style="margin-left: 20px;">Y-Axis:</label>
+                <select id="y-metric">
+                    <option value="revenue_per_capita">Revenue Per Capita</option>
+                    <option value="total_revenue">Total Revenue</option>
+                </select>
+                
+                <button id="update-metrics-btn" style="margin-left: 10px;">Update Chart</button>
+            </div>
+            
+            <div class="highlight-info">
+                Select metrics to compare and highlight specific LGAs. Bubble size represents average venue capacity, and color represents average gig frequency.
+            </div>
+        </div>
+        <div id="chart" style="width: 100%; height: 800px;"></div>
+    </div>
+
+    <script>
+        // Data for the plot
+        const lgas = ['Alpine Shire Council', 'Ararat Rural City Council', 'Ballarat City Council', 'Banyule City Council', 'Bass Coast Shire Council', 'Baw Baw Shire Council', 'Bayside City Council', 'Benalla Rural City Council', 'Boroondara City Council', 'Brimbank City Council', 'Buloke Shire Council', 'Campaspe Shire Council', 'Cardinia Shire Council', 'Casey City Council', 'Central Goldfields Shire Council', 'Colac-Otway Shire Council', 'Corangamite Shire Council', 'Darebin City Council', 'East Gippsland Shire Council', 'Frankston City Council', 'Gannawarra Shire Council', 'Glen Eira City Council', 'Glenelg Shire Council', 'Golden Plains Shire Council', 'Greater Bendigo City Council', 'Greater Dandenong City Council', 'Greater Geelong City Council', 'Greater Shepparton City Council', 'Hepburn Shire Council', 'Hindmarsh Shire Council', 'Hobsons Bay City Council', 'Horsham Rural City Council', 'Hume City Council', 'Indigo Shire Council', 'Kingston City Council', 'Knox City Council', 'Latrobe City Council', 'Loddon Shire Council', 'Macedon Ranges Shire Council', 'Manningham City Council', 'Mansfield Shire Council', 'Maribyrnong City Council', 'Maroondah City Council', 'Melbourne City Council', 'Melton City Council', 'Merri-Bek City Council', 'Mildura Rural City Council', 'Mitchell Shire Council', 'Moira Shire Council', 'Monash City Council', 'Moonee Valley City Council', 'Moorabool Shire Council', 'Mornington Peninsula Shire Council', 'Mount Alexander Shire Council', 'Moyne Shire Council', 'Murrindindi Shire Council', 'Nillumbik Shire Council', 'Northern Grampians Shire Council', 'Port Phillip City Council', 'Pyrenees Shire Council', 'Queenscliffe Borough Council', 'South Gippsland Shire Council', 'Southern Grampians Shire Council', 'Stonnington City Council', 'Strathbogie Shire Council', 'Surf Coast Shire Council', 'Swan Hill Rural City Council', 'Towong Shire Council', 'Wangaratta Rural City Council', 'Warrnambool City Council', 'Wellington Shire Council', 'West Wimmera Shire Council', 'Whitehorse City Council', 'Whittlesea City Council', 'Wodonga City Council', 'Wyndham City Council', 'Yarra City Council', 'Yarra Ranges Shire Council', 'Yarriambiack Shire Council'];
+        const venueCount = [30, 8, 71, 17, 38, 34, 29, 3, 16, 26, 16, 37, 26, 14, 7, 19, 15, 63, 51, 21, 8, 24, 21, 6, 80, 17, 132, 30, 20, 8, 30, 18, 19, 16, 36, 23, 39, 12, 26, 15, 19, 41, 19, 230, 5, 76, 27, 22, 20, 26, 33, 17, 83, 20, 19, 15, 11, 15, 91, 11, 9, 23, 16, 82, 12, 28, 10, 9, 5, 16, 30, 3, 14, 11, 10, 23, 141, 70, 8];
+        const avgFrequency = [1.9833333333333334, 0.35, 2.1253521126760564, 1.6764705882352942, 1.5815789473684212, 1.1029411764705883, 1.396551724137931, 0.06666666666666667, 2.29375, 1.0961538461538463, 0.3125, 1.8918918918918919, 1.2576923076923079, 1.3214285714285714, 1.5714285714285714, 1.9789473684210528, 1.1333333333333333, 3.86031746031746, 0.7313725490196078, 3.0571428571428574, 0.825, 1.4416666666666667, 1.2476190476190476, 0.39999999999999997, 2.295, 1.0588235294117647, 1.837878787878788, 1.7666666666666666, 1.55, 0.4625, 2.49, 0.8833333333333333, 1.894736842105263, 1.36875, 1.213888888888889, 2.3304347826086955, 1.3025641025641026, 1.2750000000000001, 0.7230769230769231, 0.43333333333333335, 1.3789473684210527, 2.1609756097560973, 3.473684210526316, 3.000434782608696, 2.2, 3.9921052631578946, 2.088888888888889, 1.1681818181818182, 0.915, 1.1615384615384614, 2.003030303030303, 1.7294117647058822, 1.7072289156626506, 2.71, 1.5, 3.2666666666666666, 3.790909090909091, 0.48666666666666664, 3.3000000000000003, 0.8545454545454546, 1.0555555555555556, 0.8347826086956521, 0.63125, 3.381707317073171, 0.20833333333333334, 2.0535714285714284, 1.5000000000000002, 2.466666666666667, 3.2, 2.725, 1.3533333333333333, 0.39999999999999997, 1.1357142857142857, 2.036363636363636, 3.13, 1.7695652173913046, 3.9553191489361703, 1.6600000000000001, 1.3];
+        const totalCapacity = [6856.0, 2607.0, 18514.0, 5474.0, 8139.0, 9711.0, 5004.0, 500.0, 5220.0, 11442.0, 1846.0, 6740.0, 7411.0, 8198.0, 2771.0, 3786.0, 3050.0, 22212.0, 9423.0, 8689.0, 1477.0, 6998.0, 3677.0, 326.0, 23164.0, 7866.0, 45204.0, 6170.0, 7929.0, 1072.0, 8353.0, 4680.0, 5596.0, 6015.0, 7879.0, 12418.0, 13955.0, 1869.0, 5464.0, 4931.0, 6359.0, 10069.0, 7375.0, 168257.0, 1417.0, 18882.0, 7344.0, 5517.0, 4679.0, 11858.0, 8885.0, 2619.0, 30239.0, 2603.0, 2983.0, 3833.0, 2533.0, 2050.0, 29627.0, 1318.0, 830.0, 3581.0, 2771.0, 19956.0, 2235.0, 11173.0, 3568.0, 1736.0, 453.0, 5996.0, 6087.0, 618.0, 8372.0, 6956.0, 3780.0, 8796.0, 32841.0, 25151.0, 1062.0];
+        const avgCapacity = [228.53333333333333, 325.875, 260.76056338028167, 322.0, 214.18421052631578, 285.61764705882354, 172.55172413793105, 166.66666666666666, 326.25, 440.0769230769231, 115.375, 182.16216216216216, 285.03846153846155, 585.5714285714286, 395.85714285714283, 199.26315789473685, 203.33333333333334, 352.57142857142856, 184.76470588235293, 413.76190476190476, 184.625, 291.5833333333333, 175.0952380952381, 54.333333333333336, 289.55, 462.70588235294116, 342.45454545454544, 205.66666666666666, 396.45, 134.0, 278.43333333333334, 260.0, 294.5263157894737, 375.9375, 218.86111111111111, 539.9130434782609, 357.8205128205128, 155.75, 210.15384615384616, 328.73333333333335, 334.6842105263158, 245.58536585365854, 388.1578947368421, 731.5521739130435, 283.4, 248.44736842105263, 272.0, 250.77272727272728, 233.95, 456.0769230769231, 269.24242424242425, 154.05882352941177, 364.32530120481925, 130.15, 157.0, 255.53333333333333, 230.27272727272728, 136.66666666666666, 325.57142857142856, 119.81818181818181, 92.22222222222223, 155.69565217391303, 173.1875, 243.3658536585366, 186.25, 399.0357142857143, 356.8, 192.88888888888889, 90.6, 374.75, 202.9, 206.0, 598.0, 632.3636363636364, 378.0, 382.4347826086956, 232.91489361702128, 359.3, 132.75];
+        const population = [13182, 11683, 118137, 129602, 42729, 60644, 104272, 14529, 174537, 196046, 6040, 38299, 126960, 392110, 13574, 22273, 15948, 155683, 49179, 142826, 10420, 156837, 20022, 25818, 124174, 163792, 282809, 69135, 16670, 5559, 93738, 20315, 262764, 17662, 163724, 161766, 78154, 7747, 52920, 129514, 10546, 91762, 117434, 177396, 206070, 181223, 57554, 53723, 30775, 203560, 126486, 39092, 170243, 20576, 17610, 15482, 63264, 11879, 109515, 7786, 3238, 30823, 16470, 111335, 11578, 39292, 21212, 6243, 30002, 35907, 46124, 3933, 178639, 245029, 44276, 324087, 97448, 158694, 6389];
+        const totalRevenue = [41100000, 36600000, 273300000, 173200000, 116500000, 147800000, 173200000, 39300000, 253900000, 243500000, 38400000, 92100000, 121600000, 353600000, 36900000, 63800000, 55700000, 191800000, 141600000, 207800000, 40600000, 188500000, 60300000, 52500000, 245400000, 249500000, 567000000, 165100000, 47100000, 26400000, 160700000, 60600000, 243500000, 42800000, 253800000, 191900000, 176100000, 33400000, 126900000, 169700000, 29900000, 160300000, 161800000, 519200000, 121600000, 248400000, 147600000, 121600000, 79200000, 216800000, 200600000, 75800000, 123700000, 48800000, 57500000, 40200000, 89700000, 42900000, 243500000, 27700000, 20200000, 89700000, 48900000, 196600000, 36400000, 102800000, 65200000, 32000000, 84700000, 93300000, 123700000, 26700000, 211400000, 353600000, 87300000, 248400000, 202600000, 248400000, 33000000];
+        const venuesPer10k = [22.75830678197542, 6.847556278353163, 6.009971473797371, 1.3117081526519654, 8.893257506611434, 5.606490337049007, 2.7811876630351393, 2.0648358455502787, 0.916711069859113, 1.3262193566815952, 26.490066225165563, 9.660826653437427, 2.0478890989287963, 0.3570426665986586, 5.156917636658317, 8.530507789700534, 9.405568096313017, 4.046684609109537, 10.370279997559933, 1.4703205298755129, 7.677543186180422, 1.5302511524703992, 10.488462691039857, 2.3239600278875203, 6.442572519206919, 1.0379017290221746, 4.6674610779713515, 4.3393360815795186, 11.997600479904019, 14.391077531930204, 3.2004096524355115, 8.860447944868323, 0.7230823096010107, 9.05899671611369, 2.198822408443478, 1.421806807363723, 4.9901476571896515, 15.48986704530786, 4.91307634164777, 1.1581759500903377, 18.016309501232694, 4.468080469039472, 1.6179300713592315, 12.965343074251956, 0.24263599747658565, 4.193728169161751, 4.6912464815651385, 4.095080319416264, 6.498781478472786, 1.2772646885439183, 2.608984393529719, 4.3487158497902385, 4.875384009915239, 9.720062208398135, 10.789324247586597, 9.688670714377986, 1.7387455741021751, 12.627325532452225, 8.309364014062, 14.127921911122527, 27.794935145151328, 7.461960224507672, 9.714632665452339, 7.36515920420353, 10.364484366902746, 7.126132546065357, 4.714312653215162, 14.416146083613647, 1.6665555629624693, 4.45595566324115, 6.504206053247767, 7.627765064836003, 0.7837034466158006, 0.448926453603451, 2.2585599421808658, 0.7096859793820796, 14.469255397750594, 4.411004826899568, 12.521521364845828];
+        const revenuePerCapita = [3117.8880291306327, 3132.756997346572, 2313.4157799842556, 1336.399129643061, 2726.4855250532423, 2437.1743288701273, 1661.040355992021, 2704.934957670865, 1454.70587898268, 1242.0554359691093, 6357.615894039735, 2404.7625264367216, 957.7819785759294, 901.7877636377547, 2718.432297038456, 2864.4547209626003, 3492.600953097567, 1231.9906476622368, 2879.2777404989934, 1454.9171719434837, 3896.3531669865642, 1201.884759336126, 3011.6871441414446, 2033.4650244015802, 1976.2591202667224, 1523.2734199472502, 2004.8866903104215, 2388.0812902292614, 2825.4349130173964, 4749.055585536967, 1714.3527704879557, 2983.017474772336, 926.6870651991901, 2423.281621560412, 1550.169797952652, 1186.2814188395585, 2253.2435959771733, 4311.346327610688, 2397.9591836734694, 1310.283058202202, 2835.1981794045137, 1746.9104858220178, 1377.7951870838087, 2926.7852713702678, 590.0907458630562, 1370.6869437102355, 2564.5480765889424, 2263.462576550081, 2573.5174654752236, 1065.0422479858519, 1585.94627073352, 1939.0156553770591, 726.6084361765242, 2371.6951788491447, 3265.19023282226, 2596.5637514533005, 1417.8679817905918, 3611.4151022813367, 2223.439711455052, 3557.6676085281274, 6238.418777022854, 2910.1644875579923, 2969.034608378871, 1765.841828715139, 3143.893591293833, 2616.308663341138, 3073.731849896285, 5125.740829729297, 2823.1451236584226, 2598.379146127496, 2681.900962622496, 6788.710907704043, 1183.392204389859, 1443.0944908561844, 1971.7228295238956, 766.4608577326459, 2079.057548641327, 1565.2765700026466, 5165.127562998904];
+        const capacityPerPop = [0.520103170990745, 0.2231447402208337, 0.15671635474068243, 0.04223700251539328, 0.19047953380608018, 0.1601312578325968, 0.047989872640785636, 0.03441393075917131, 0.02990769865415356, 0.05836385338134927, 0.30562913907284767, 0.1759837071464007, 0.05837271581600504, 0.020907398434112875, 0.20414026815971711, 0.169981592062138, 0.191246551291698, 0.14267453736117625, 0.1916061733666809, 0.06083626230518253, 0.14174664107485604, 0.04461957318744939, 0.18364798721406453, 0.012626849484855528, 0.18654468729363635, 0.04802432353228485, 0.1598393261883462, 0.08924567874448543, 0.47564487102579484, 0.19284043892786473, 0.08911007275597943, 0.2303716465665764, 0.02129667686593293, 0.3405616577963991, 0.048123671544794897, 0.07676520406018571, 0.17855771937456816, 0.24125467923066993, 0.10325018896447467, 0.038073104065969705, 0.6029774322017827, 0.1097295176652645, 0.0628012330330228, 0.948482491149744, 0.006876304168486436, 0.10419207275014761, 0.12760190429857177, 0.10269344601008878, 0.15203899268887083, 0.05825309491059147, 0.07024492829245925, 0.06699580476823902, 0.1776225747901529, 0.1265066096423017, 0.1693923906871096, 0.2475778323214055, 0.04003856853818918, 0.17257344894351376, 0.27052915125781857, 0.1692781916259954, 0.25633106856084004, 0.11617947636505208, 0.16824529447480266, 0.179242825706202, 0.19303852133356367, 0.2843581390613865, 0.16820667546671694, 0.27807144001281436, 0.015098993400439971, 0.16698693847996213, 0.1319703408203972, 0.15713196033562166, 0.046865466107624876, 0.028388476466050958, 0.08537356581443671, 0.027140860324542482, 0.33701050816845907, 0.15848740343050147, 0.16622319611832836];
+        const frequencyWeighted = [45.13730845091792, 2.3966446974236066, 12.773305568958074, 2.199040138269471, 14.065388845982824, 6.183629048215817, 3.8840724259628665, 0.13765572303668525, 2.1027060164893405, 1.4537404486702101, 8.278145695364238, 18.277239614611346, 2.5756143667296785, 0.4718063808625131, 8.103727714748784, 16.881425941723162, 10.659643842488085, 15.62148725294348, 7.584538115862461, 4.4949799056194255, 6.333973128598847, 2.206112078144826, 13.085605833583058, 0.9295840111550081, 14.78570393157988, 1.098954771905832, 8.578227708453408, 7.666160410790483, 18.596280743851228, 6.655873358517719, 7.969020034564425, 7.826729017967018, 1.3700506918755995, 12.399501755180614, 2.6691260902494442, 3.3134280380302408, 6.499987204749598, 19.749580482767527, 3.5525321239606957, 0.5018762450391464, 24.843542575384035, 9.655412916021882, 5.620178142616278, 38.90166632844033, 0.5337991944484883, 16.741804296364148, 9.799492650380513, 4.783798373136273, 5.9463850528026, 1.4835920613087048, 5.225874800373163, 7.520720351990176, 8.323396556686617, 26.341368584758946, 16.1839863713799, 31.649657666968093, 6.591426403641883, 6.145298425793416, 27.420901246404604, 12.072951451322886, 29.33909820877085, 6.2291146221977085, 6.132361870066788, 24.906812772263887, 2.159267576438072, 14.634022192812784, 7.071468979822742, 35.559827006247005, 5.332977801479901, 12.142479182332135, 8.802358858728645, 3.051106025934401, 0.8900632000850877, 0.9141775055197547, 7.0692926190261085, 1.2558356243848103, 57.230522945570975, 7.322268012653284, 16.277977774299575];
+        const gigDensityScore = [45.13730845091792, 2.3966446974236066, 12.773305568958076, 2.1990401382694715, 14.065388845982822, 6.183629048215817, 3.884072425962867, 0.13765572303668525, 2.1027060164893405, 1.4537404486702104, 8.278145695364238, 18.277239614611346, 2.575614366729679, 0.4718063808625131, 8.103727714748784, 16.881425941723165, 10.659643842488085, 15.621487252943481, 7.58453811586246, 4.4949799056194255, 6.333973128598848, 2.2061120781448254, 13.08560583358306, 0.9295840111550081, 14.78570393157988, 1.098954771905832, 8.578227708453408, 7.666160410790482, 18.59628074385123, 6.65587335851772, 7.969020034564424, 7.826729017967018, 1.3700506918755992, 12.399501755180612, 2.6691260902494442, 3.3134280380302408, 6.499987204749598, 19.749580482767524, 3.552532123960695, 0.5018762450391463, 24.84354257538403, 9.65541291602188, 5.620178142616278, 38.90166632844033, 0.5337991944484884, 16.741804296364148, 9.799492650380513, 4.783798373136273, 5.946385052802599, 1.483592061308705, 5.225874800373164, 7.520720351990176, 8.323396556686617, 26.341368584758946, 16.183986371379895, 31.64965766696809, 6.591426403641882, 6.145298425793416, 27.4209012464046, 12.072951451322888, 29.339098208770846, 6.2291146221977085, 6.132361870066789, 24.90681277226389, 2.159267576438072, 14.634022192812784, 7.071468979822743, 35.559827006247, 5.3329778014799025, 12.142479182332135, 8.802358858728644, 3.051106025934401, 0.8900632000850878, 0.9141775055197547, 7.069292619026109, 1.2558356243848106, 57.23052294557097, 7.322268012653283, 16.277977774299575];
+        
+        // Create the data with custom hover text
+        function createHoverText(i) {
+            const formattedRevenue = totalRevenue[i].toLocaleString('en-AU', {
+                style: 'currency',
+                currency: 'AUD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+            
+            const formattedRevenuePerCapita = revenuePerCapita[i].toLocaleString('en-AU', {
+                style: 'currency',
+                currency: 'AUD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+            
+            return `<b>${lgas[i]}</b><br>` +
+                   `Population: ${population[i].toLocaleString()}<br>` +
+                   `Venues: ${venueCount[i]}<br>` +
+                   `Venues Per 10k Pop: ${venuesPer10k[i].toFixed(2)}<br>` +
+                   `Avg Frequency: ${avgFrequency[i].toFixed(2)} gigs/month<br>` +
+                   `Avg Venue Capacity: ${avgCapacity[i].toFixed(0)}<br>` +
+                   `Gig Density Score: ${gigDensityScore[i].toFixed(2)}<br>` +
+                   `Total Revenue: ${formattedRevenue}<br>` +
+                   `Revenue Per Capita: ${formattedRevenuePerCapita}`;
+        }
+        
+        // Get X and Y values based on selected metrics
+        function getMetricValues() {
+            const xMetric = document.getElementById('x-metric').value;
+            const yMetric = document.getElementById('y-metric').value;
+            
+            let xValues, yValues, xTitle, yTitle;
+            
+            // X-axis metric
+            switch(xMetric) {
+                case 'venues_per_10k':
+                    xValues = venuesPer10k;
+                    xTitle = 'Venues Per 10,000 Population';
+                    break;
+                case 'frequency_weighted':
+                    xValues = frequencyWeighted;
+                    xTitle = 'Frequency-Weighted Venue Density';
+                    break;
+                case 'gig_density_score':
+                    xValues = gigDensityScore;
+                    xTitle = 'Gig Density Score (Venues per 10k × Avg Frequency)';
+                    break;
+                case 'capacity_per_pop':
+                    xValues = capacityPerPop;
+                    xTitle = 'Venue Capacity Per Population';
+                    break;
+                case 'venue_count':
+                    xValues = venueCount;
+                    xTitle = 'Total Venue Count';
+                    break;
+                case 'avg_frequency':
+                    xValues = avgFrequency;
+                    xTitle = 'Average Gig Frequency (per month)';
+                    break;
+                default:
+                    xValues = venuesPer10k;
+                    xTitle = 'Venues Per 10,000 Population';
+            }
+            
+            // Y-axis metric
+            switch(yMetric) {
+                case 'revenue_per_capita':
+                    yValues = revenuePerCapita;
+                    yTitle = 'Revenue Per Capita (AUD)';
+                    break;
+                case 'total_revenue':
+                    yValues = totalRevenue;
+                    yTitle = 'Total Revenue (AUD)';
+                    break;
+                default:
+                    yValues = revenuePerCapita;
+                    yTitle = 'Revenue Per Capita (AUD)';
+            }
+            
+            return { xValues, yValues, xTitle, yTitle };
+        }
+        
+        // Function to create the plot with all LGAs
+        function createPlot() {
+            const metrics = getMetricValues();
+            const hoverTexts = [];
+            
+            for (let i = 0; i < lgas.length; i++) {
+                hoverTexts.push(createHoverText(i));
+            }
+            
+            // Calculate bubble sizes based on average capacity
+            const maxCapacity = Math.max(...avgCapacity);
+            const bubbleSizes = avgCapacity.map(cap => Math.max(Math.sqrt(cap / maxCapacity) * 30, 8));
+            
+            const trace = {
+                x: metrics.xValues,
+                y: metrics.yValues,
+                mode: 'markers',
+                type: 'scatter',
+                text: hoverTexts,
+                hoverinfo: 'text',
+                marker: {
+                    size: bubbleSizes,
+                    color: avgFrequency,
+                    colorscale: 'Viridis',
+                    colorbar: {
+                        title: 'Avg Gigs<br>Per Month'
+                    },
+                    line: {
+                        width: 1,
+                        color: 'darkgray'
+                    }
+                }
+            };
+            
+            const layout = {
+                title: 'Victorian LGA Gig Density vs Revenue Analysis<br>Bubble Size = Average Venue Capacity',
+                xaxis: {
+                    title: metrics.xTitle,
+                    gridcolor: 'rgba(200, 200, 200, 0.5)'
+                },
+                yaxis: {
+                    title: metrics.yTitle,
+                    gridcolor: 'rgba(200, 200, 200, 0.5)'
+                },
+                plot_bgcolor: 'rgba(240, 240, 240, 0.5)',
+                hoverlabel: {
+                    bgcolor: 'white',
+                    font: {
+                        family: 'Arial',
+                        size: 12
+                    },
+                    bordercolor: 'gray'
+                }
+            };
+            
+            Plotly.newPlot('chart', [trace], layout);
+        }
+        
+        // Function to highlight a specific LGA
+        function highlightLGA(selectedLGA) {
+            if (selectedLGA === 'all') {
+                // Show all LGAs normally
+                createPlot();
+                return;
+            }
+            
+            // Find the index of the selected LGA
+            const lgaIndex = lgas.indexOf(selectedLGA);
+            if (lgaIndex === -1) return;
+            
+            const metrics = getMetricValues();
+            
+            // Create hover texts
+            const hoverTexts = [];
+            for (let i = 0; i < lgas.length; i++) {
+                hoverTexts.push(createHoverText(i));
+            }
+            
+            // Calculate bubble sizes based on average capacity
+            const maxCapacity = Math.max(...avgCapacity);
+            const bubbleSizes = avgCapacity.map(cap => Math.max(Math.sqrt(cap / maxCapacity) * 30, 8));
+            const highlightedSizes = [...bubbleSizes];
+            highlightedSizes[lgaIndex] = Math.max(bubbleSizes[lgaIndex] * 1.5, 15); // Make highlighted bubble larger
+            
+            // Create a trace for all LGAs
+            const trace = {
+                x: metrics.xValues,
+                y: metrics.yValues,
+                mode: 'markers',
+                type: 'scatter',
+                text: hoverTexts,
+                hoverinfo: 'text',
+                marker: {
+                    size: highlightedSizes,
+                    color: Array(lgas.length).fill('rgba(100, 100, 100, 0.3)'), // All dimmed
+                    line: {
+                        width: Array(lgas.length).fill(1),
+                        color: Array(lgas.length).fill('darkgray')
+                    }
+                }
+            };
+            
+            // Override properties for the highlighted LGA
+            trace.marker.color[lgaIndex] = 'rgba(255, 0, 0, 1)'; // Bright red
+            trace.marker.line.width[lgaIndex] = 3;
+            trace.marker.line.color[lgaIndex] = 'black';
+            
+            const layout = {
+                title: `Victorian LGA Gig Density vs Revenue Analysis: ${selectedLGA} Highlighted<br>Bubble Size = Average Venue Capacity`,
+                xaxis: {
+                    title: metrics.xTitle,
+                    gridcolor: 'rgba(200, 200, 200, 0.5)'
+                },
+                yaxis: {
+                    title: metrics.yTitle,
+                    gridcolor: 'rgba(200, 200, 200, 0.5)'
+                },
+                plot_bgcolor: 'rgba(240, 240, 240, 0.5)',
+                hoverlabel: {
+                    bgcolor: 'white',
+                    font: {
+                        family: 'Arial',
+                        size: 12
+                    },
+                    bordercolor: 'gray'
+                }
+            };
+            
+            Plotly.newPlot('chart', [trace], layout);
+        }
+        
+        // Initialize the plot
+        createPlot();
+        
+        // Handle the highlight button click
+        document.getElementById('highlight-btn').addEventListener('click', function() {
+            const selectedLGA = document.getElementById('lga-select').value;
+            highlightLGA(selectedLGA);
+        });
+        
+        // Also highlight when selecting from dropdown
+        document.getElementById('lga-select').addEventListener('change', function() {
+            const selectedLGA = this.value;
+            highlightLGA(selectedLGA);
+        });
+        
+        // Update the chart when metrics change
+        document.getElementById('update-metrics-btn').addEventListener('click', function() {
+            const selectedLGA = document.getElementById('lga-select').value;
+            if (selectedLGA === 'all') {
+                createPlot();
+            } else {
+                highlightLGA(selectedLGA);
+            }
+        });
+    </script>
+</body>
+</html>

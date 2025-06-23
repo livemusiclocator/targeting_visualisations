@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LGA Music Venue Analysis</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #eef;
+            border-radius: 8px;
+        }
+        select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            min-width: 300px;
+        }
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .highlight-info {
+            font-style: italic;
+            margin-top: 10px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive LGA Music Venue Analysis</h1>
+        <div class="controls">
+            <label for="lga-select">Select LGA to Highlight:</label>
+            <select id="lga-select">
+                <option value="all">-- All LGAs --</option>
+                <!-- LGA options will be inserted here -->
+                <option value="Alpine Shire Council">Alpine Shire Council</option>
+<option value="Ararat Rural City Council">Ararat Rural City Council</option>
+<option value="Ballarat City Council">Ballarat City Council</option>
+<option value="Banyule City Council">Banyule City Council</option>
+<option value="Bass Coast Shire Council">Bass Coast Shire Council</option>
+<option value="Baw Baw Shire Council">Baw Baw Shire Council</option>
+<option value="Bayside City Council">Bayside City Council</option>
+<option value="Benalla Rural City Council">Benalla Rural City Council</option>
+<option value="Boroondara City Council">Boroondara City Council</option>
+<option value="Brimbank City Council">Brimbank City Council</option>
+<option value="Buloke Shire Council">Buloke Shire Council</option>
+<option value="Campaspe Shire Council">Campaspe Shire Council</option>
+<option value="Cardinia Shire Council">Cardinia Shire Council</option>
+<option value="Casey City Council">Casey City Council</option>
+<option value="Central Goldfields Shire Council">Central Goldfields Shire Council</option>
+<option value="Colac-Otway Shire Council">Colac-Otway Shire Council</option>
+<option value="Corangamite Shire Council">Corangamite Shire Council</option>
+<option value="Darebin City Council">Darebin City Council</option>
+<option value="East Gippsland Shire Council">East Gippsland Shire Council</option>
+<option value="Frankston City Council">Frankston City Council</option>
+<option value="Gannawarra Shire Council">Gannawarra Shire Council</option>
+<option value="Glen Eira City Council">Glen Eira City Council</option>
+<option value="Glenelg Shire Council">Glenelg Shire Council</option>
+<option value="Golden Plains Shire Council">Golden Plains Shire Council</option>
+<option value="Greater Bendigo City Council">Greater Bendigo City Council</option>
+<option value="Greater Dandenong City Council">Greater Dandenong City Council</option>
+<option value="Greater Geelong City Council">Greater Geelong City Council</option>
+<option value="Greater Shepparton City Council">Greater Shepparton City Council</option>
+<option value="Hepburn Shire Council">Hepburn Shire Council</option>
+<option value="Hindmarsh Shire Council">Hindmarsh Shire Council</option>
+<option value="Hobsons Bay City Council">Hobsons Bay City Council</option>
+<option value="Horsham Rural City Council">Horsham Rural City Council</option>
+<option value="Hume City Council">Hume City Council</option>
+<option value="Indigo Shire Council">Indigo Shire Council</option>
+<option value="Kingston City Council">Kingston City Council</option>
+<option value="Knox City Council">Knox City Council</option>
+<option value="Latrobe City Council">Latrobe City Council</option>
+<option value="Loddon Shire Council">Loddon Shire Council</option>
+<option value="Macedon Ranges Shire Council">Macedon Ranges Shire Council</option>
+<option value="Manningham City Council">Manningham City Council</option>
+<option value="Mansfield Shire Council">Mansfield Shire Council</option>
+<option value="Maribyrnong City Council">Maribyrnong City Council</option>
+<option value="Maroondah City Council">Maroondah City Council</option>
+<option value="Melbourne City Council">Melbourne City Council</option>
+<option value="Melton City Council">Melton City Council</option>
+<option value="Merri-Bek City Council">Merri-Bek City Council</option>
+<option value="Mildura Rural City Council">Mildura Rural City Council</option>
+<option value="Mitchell Shire Council">Mitchell Shire Council</option>
+<option value="Moira Shire Council">Moira Shire Council</option>
+<option value="Monash City Council">Monash City Council</option>
+<option value="Moonee Valley City Council">Moonee Valley City Council</option>
+<option value="Moorabool Shire Council">Moorabool Shire Council</option>
+<option value="Mornington Peninsula Shire Council">Mornington Peninsula Shire Council</option>
+<option value="Mount Alexander Shire Council">Mount Alexander Shire Council</option>
+<option value="Moyne Shire Council">Moyne Shire Council</option>
+<option value="Murrindindi Shire Council">Murrindindi Shire Council</option>
+<option value="Nillumbik Shire Council">Nillumbik Shire Council</option>
+<option value="Northern Grampians Shire Council">Northern Grampians Shire Council</option>
+<option value="Port Phillip City Council">Port Phillip City Council</option>
+<option value="Pyrenees Shire Council">Pyrenees Shire Council</option>
+<option value="Queenscliffe Borough Council">Queenscliffe Borough Council</option>
+<option value="South Gippsland Shire Council">South Gippsland Shire Council</option>
+<option value="Southern Grampians Shire Council">Southern Grampians Shire Council</option>
+<option value="Stonnington City Council">Stonnington City Council</option>
+<option value="Strathbogie Shire Council">Strathbogie Shire Council</option>
+<option value="Surf Coast Shire Council">Surf Coast Shire Council</option>
+<option value="Swan Hill Rural City Council">Swan Hill Rural City Council</option>
+<option value="Towong Shire Council">Towong Shire Council</option>
+<option value="Wangaratta Rural City Council">Wangaratta Rural City Council</option>
+<option value="Warrnambool City Council">Warrnambool City Council</option>
+<option value="Wellington Shire Council">Wellington Shire Council</option>
+<option value="West Wimmera Shire Council">West Wimmera Shire Council</option>
+<option value="Whitehorse City Council">Whitehorse City Council</option>
+<option value="Whittlesea City Council">Whittlesea City Council</option>
+<option value="Wodonga City Council">Wodonga City Council</option>
+<option value="Wyndham City Council">Wyndham City Council</option>
+<option value="Yarra City Council">Yarra City Council</option>
+<option value="Yarra Ranges Shire Council">Yarra Ranges Shire Council</option>
+<option value="Yarriambiack Shire Council">Yarriambiack Shire Council</option>
+            </select>
+            <div class="highlight-info">Select an LGA to highlight it (others will be dimmed)</div>
+        </div>
+        <div id="plotly-div" style="width: 100%; height: 800px;"></div>
+    </div>
+
+    <script>
+        // Data for the plot
+        const lgaData = ['Alpine Shire Council', 'Ararat Rural City Council', 'Ballarat City Council', 'Banyule City Council', 'Bass Coast Shire Council', 'Baw Baw Shire Council', 'Bayside City Council', 'Benalla Rural City Council', 'Boroondara City Council', 'Brimbank City Council', 'Buloke Shire Council', 'Campaspe Shire Council', 'Cardinia Shire Council', 'Casey City Council', 'Central Goldfields Shire Council', 'Colac-Otway Shire Council', 'Corangamite Shire Council', 'Darebin City Council', 'East Gippsland Shire Council', 'Frankston City Council', 'Gannawarra Shire Council', 'Glen Eira City Council', 'Glenelg Shire Council', 'Golden Plains Shire Council', 'Greater Bendigo City Council', 'Greater Dandenong City Council', 'Greater Geelong City Council', 'Greater Shepparton City Council', 'Hepburn Shire Council', 'Hindmarsh Shire Council', 'Hobsons Bay City Council', 'Horsham Rural City Council', 'Hume City Council', 'Indigo Shire Council', 'Kingston City Council', 'Knox City Council', 'Latrobe City Council', 'Loddon Shire Council', 'Macedon Ranges Shire Council', 'Manningham City Council', 'Mansfield Shire Council', 'Maribyrnong City Council', 'Maroondah City Council', 'Melbourne City Council', 'Melton City Council', 'Merri-Bek City Council', 'Mildura Rural City Council', 'Mitchell Shire Council', 'Moira Shire Council', 'Monash City Council', 'Moonee Valley City Council', 'Moorabool Shire Council', 'Mornington Peninsula Shire Council', 'Mount Alexander Shire Council', 'Moyne Shire Council', 'Murrindindi Shire Council', 'Nillumbik Shire Council', 'Northern Grampians Shire Council', 'Port Phillip City Council', 'Pyrenees Shire Council', 'Queenscliffe Borough Council', 'South Gippsland Shire Council', 'Southern Grampians Shire Council', 'Stonnington City Council', 'Strathbogie Shire Council', 'Surf Coast Shire Council', 'Swan Hill Rural City Council', 'Towong Shire Council', 'Wangaratta Rural City Council', 'Warrnambool City Council', 'Wellington Shire Council', 'West Wimmera Shire Council', 'Whitehorse City Council', 'Whittlesea City Council', 'Wodonga City Council', 'Wyndham City Council', 'Yarra City Council', 'Yarra Ranges Shire Council', 'Yarriambiack Shire Council'];
+        const x = [30, 8, 71, 17, 38, 34, 29, 3, 16, 26, 16, 37, 26, 14, 7, 19, 15, 63, 51, 21, 8, 24, 21, 6, 80, 17, 132, 30, 20, 8, 30, 18, 19, 16, 36, 23, 39, 12, 26, 15, 19, 41, 19, 230, 5, 76, 27, 22, 20, 26, 33, 17, 83, 20, 19, 15, 11, 15, 91, 11, 9, 23, 16, 82, 12, 28, 10, 9, 5, 16, 30, 3, 14, 11, 10, 23, 141, 70, 8];
+        const y = [1.9833333333333334, 0.35, 2.1253521126760564, 1.6764705882352942, 1.5815789473684212, 1.1029411764705883, 1.396551724137931, 0.06666666666666667, 2.29375, 1.0961538461538463, 0.3125, 1.8918918918918919, 1.2576923076923079, 1.3214285714285714, 1.5714285714285714, 1.9789473684210528, 1.1333333333333333, 3.86031746031746, 0.7313725490196078, 3.0571428571428574, 0.825, 1.4416666666666667, 1.2476190476190476, 0.39999999999999997, 2.295, 1.0588235294117647, 1.837878787878788, 1.7666666666666666, 1.55, 0.4625, 2.49, 0.8833333333333333, 1.894736842105263, 1.36875, 1.213888888888889, 2.3304347826086955, 1.3025641025641026, 1.2750000000000001, 0.7230769230769231, 0.43333333333333335, 1.3789473684210527, 2.1609756097560973, 3.473684210526316, 3.000434782608696, 2.2, 3.9921052631578946, 2.088888888888889, 1.1681818181818182, 0.915, 1.1615384615384614, 2.003030303030303, 1.7294117647058822, 1.7072289156626506, 2.71, 1.5, 3.2666666666666666, 3.790909090909091, 0.48666666666666664, 3.3000000000000003, 0.8545454545454546, 1.0555555555555556, 0.8347826086956521, 0.63125, 3.381707317073171, 0.20833333333333334, 2.0535714285714284, 1.5000000000000002, 2.466666666666667, 3.2, 2.725, 1.3533333333333333, 0.39999999999999997, 1.1357142857142857, 2.036363636363636, 3.13, 1.7695652173913046, 3.9553191489361703, 1.6600000000000001, 1.3];
+        const sizes = [68.56, 26.07, 185.14, 54.74, 81.39, 97.11, 50.04, 5.0, 52.2, 114.42, 18.46, 67.4, 74.11, 81.98, 27.71, 37.86, 30.5, 222.12, 94.23, 86.89, 14.77, 69.98, 36.77, 3.26, 231.64, 78.66, 452.04, 61.7, 79.29, 10.72, 83.53, 46.8, 55.96, 60.15, 78.79, 124.18, 139.55, 18.69, 54.64, 49.31, 63.59, 100.69, 73.75, 1682.57, 14.17, 188.82, 73.44, 55.17, 46.79, 118.58, 88.85, 26.19, 302.39, 26.03, 29.83, 38.33, 25.33, 20.5, 296.27, 13.18, 8.3, 35.81, 27.71, 199.56, 22.35, 111.73, 35.68, 17.36, 4.53, 59.96, 60.87, 6.18, 83.72, 69.56, 37.8, 87.96, 328.41, 251.51, 10.62];
+        const colors = [228.53333333333333, 325.875, 260.76056338028167, 322.0, 214.18421052631578, 285.61764705882354, 172.55172413793105, 166.66666666666666, 326.25, 440.0769230769231, 115.375, 182.16216216216216, 285.03846153846155, 585.5714285714286, 395.85714285714283, 199.26315789473685, 203.33333333333334, 352.57142857142856, 184.76470588235293, 413.76190476190476, 184.625, 291.5833333333333, 175.0952380952381, 54.333333333333336, 289.55, 462.70588235294116, 342.45454545454544, 205.66666666666666, 396.45, 134.0, 278.43333333333334, 260.0, 294.5263157894737, 375.9375, 218.86111111111111, 539.9130434782609, 357.8205128205128, 155.75, 210.15384615384616, 328.73333333333335, 334.6842105263158, 245.58536585365854, 388.1578947368421, 731.5521739130435, 283.4, 248.44736842105263, 272.0, 250.77272727272728, 233.95, 456.0769230769231, 269.24242424242425, 154.05882352941177, 364.32530120481925, 130.15, 157.0, 255.53333333333333, 230.27272727272728, 136.66666666666666, 325.57142857142856, 119.81818181818181, 92.22222222222223, 155.69565217391303, 173.1875, 243.3658536585366, 186.25, 399.0357142857143, 356.8, 192.88888888888889, 90.6, 374.75, 202.9, 206.0, 598.0, 632.3636363636364, 378.0, 382.4347826086956, 232.91489361702128, 359.3, 132.75];
+        const text = ['<b>Alpine Shire Council</b><br>Venues: 30<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.98 gigs/month<br>Total Capacity: 6856<br>Avg Capacity: 228', '<b>Ararat Rural City Council</b><br>Venues: 8<br>Frequency Mode: Hosts functions<br>Avg Frequency: 0.35 gigs/month<br>Total Capacity: 2607<br>Avg Capacity: 325', '<b>Ballarat City Council</b><br>Venues: 71<br>Frequency Mode: Hosts functions<br>Avg Frequency: 2.13 gigs/month<br>Total Capacity: 18514<br>Avg Capacity: 260', '<b>Banyule City Council</b><br>Venues: 17<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.68 gigs/month<br>Total Capacity: 5474<br>Avg Capacity: 322', '<b>Bass Coast Shire Council</b><br>Venues: 38<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.58 gigs/month<br>Total Capacity: 8139<br>Avg Capacity: 214', '<b>Baw Baw Shire Council</b><br>Venues: 34<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.10 gigs/month<br>Total Capacity: 9711<br>Avg Capacity: 285', '<b>Bayside City Council</b><br>Venues: 29<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.40 gigs/month<br>Total Capacity: 5004<br>Avg Capacity: 172', '<b>Benalla Rural City Council</b><br>Venues: 3<br>Frequency Mode: No Data<br>Avg Frequency: 0.07 gigs/month<br>Total Capacity: 500<br>Avg Capacity: 166', '<b>Boroondara City Council</b><br>Venues: 16<br>Frequency Mode: Hosts functions<br>Avg Frequency: 2.29 gigs/month<br>Total Capacity: 5220<br>Avg Capacity: 326', '<b>Brimbank City Council</b><br>Venues: 26<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.10 gigs/month<br>Total Capacity: 11442<br>Avg Capacity: 440', '<b>Buloke Shire Council</b><br>Venues: 16<br>Frequency Mode: Less than 1 a month<br>Avg Frequency: 0.31 gigs/month<br>Total Capacity: 1846<br>Avg Capacity: 115', '<b>Campaspe Shire Council</b><br>Venues: 37<br>Frequency Mode: Less than 1 a month<br>Avg Frequency: 1.89 gigs/month<br>Total Capacity: 6740<br>Avg Capacity: 182', '<b>Cardinia Shire Council</b><br>Venues: 26<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.26 gigs/month<br>Total Capacity: 7411<br>Avg Capacity: 285', '<b>Casey City Council</b><br>Venues: 14<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.32 gigs/month<br>Total Capacity: 8198<br>Avg Capacity: 585', '<b>Central Goldfields Shire Council</b><br>Venues: 7<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.57 gigs/month<br>Total Capacity: 2771<br>Avg Capacity: 395', '<b>Colac-Otway Shire Council</b><br>Venues: 19<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.98 gigs/month<br>Total Capacity: 3786<br>Avg Capacity: 199', '<b>Corangamite Shire Council</b><br>Venues: 15<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.13 gigs/month<br>Total Capacity: 3050<br>Avg Capacity: 203', '<b>Darebin City Council</b><br>Venues: 63<br>Frequency Mode: Hosts functions<br>Avg Frequency: 3.86 gigs/month<br>Total Capacity: 22212<br>Avg Capacity: 352', '<b>East Gippsland Shire Council</b><br>Venues: 51<br>Frequency Mode: Hosts functions<br>Avg Frequency: 0.73 gigs/month<br>Total Capacity: 9423<br>Avg Capacity: 184', '<b>Frankston City Council</b><br>Venues: 21<br>Frequency Mode: Hosts functions<br>Avg Frequency: 3.06 gigs/month<br>Total Capacity: 8689<br>Avg Capacity: 413', '<b>Gannawarra Shire Council</b><br>Venues: 8<br>Frequency Mode: Hosts functions<br>Avg Frequency: 0.82 gigs/month<br>Total Capacity: 1477<br>Avg Capacity: 184', '<b>Glen Eira City Council</b><br>Venues: 24<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.44 gigs/month<br>Total Capacity: 6998<br>Avg Capacity: 291', '<b>Glenelg Shire Council</b><br>Venues: 21<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.25 gigs/month<br>Total Capacity: 3677<br>Avg Capacity: 175', '<b>Golden Plains Shire Council</b><br>Venues: 6<br>Frequency Mode: No Data<br>Avg Frequency: 0.40 gigs/month<br>Total Capacity: 326<br>Avg Capacity: 54', '<b>Greater Bendigo City Council</b><br>Venues: 80<br>Frequency Mode: Hosts functions<br>Avg Frequency: 2.29 gigs/month<br>Total Capacity: 23164<br>Avg Capacity: 289', '<b>Greater Dandenong City Council</b><br>Venues: 17<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.06 gigs/month<br>Total Capacity: 7866<br>Avg Capacity: 462', '<b>Greater Geelong City Council</b><br>Venues: 132<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.84 gigs/month<br>Total Capacity: 45204<br>Avg Capacity: 342', '<b>Greater Shepparton City Council</b><br>Venues: 30<br>Frequency Mode: Less than 1 a month<br>Avg Frequency: 1.77 gigs/month<br>Total Capacity: 6170<br>Avg Capacity: 205', '<b>Hepburn Shire Council</b><br>Venues: 20<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.55 gigs/month<br>Total Capacity: 7929<br>Avg Capacity: 396', '<b>Hindmarsh Shire Council</b><br>Venues: 8<br>Frequency Mode: Hosts functions<br>Avg Frequency: 0.46 gigs/month<br>Total Capacity: 1072<br>Avg Capacity: 134', '<b>Hobsons Bay City Council</b><br>Venues: 30<br>Frequency Mode: Hosts functions<br>Avg Frequency: 2.49 gigs/month<br>Total Capacity: 8353<br>Avg Capacity: 278', '<b>Horsham Rural City Council</b><br>Venues: 18<br>Frequency Mode: Hosts functions<br>Avg Frequency: 0.88 gigs/month<br>Total Capacity: 4680<br>Avg Capacity: 260', '<b>Hume City Council</b><br>Venues: 19<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.89 gigs/month<br>Total Capacity: 5596<br>Avg Capacity: 294', '<b>Indigo Shire Council</b><br>Venues: 16<br>Frequency Mode: No Data<br>Avg Frequency: 1.37 gigs/month<br>Total Capacity: 6015<br>Avg Capacity: 375', '<b>Kingston City Council</b><br>Venues: 36<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.21 gigs/month<br>Total Capacity: 7879<br>Avg Capacity: 218', '<b>Knox City Council</b><br>Venues: 23<br>Frequency Mode: Hosts functions<br>Avg Frequency: 2.33 gigs/month<br>Total Capacity: 12418<br>Avg Capacity: 539', '<b>Latrobe City Council</b><br>Venues: 39<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.30 gigs/month<br>Total Capacity: 13955<br>Avg Capacity: 357', '<b>Loddon Shire Council</b><br>Venues: 12<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.28 gigs/month<br>Total Capacity: 1869<br>Avg Capacity: 155', '<b>Macedon Ranges Shire Council</b><br>Venues: 26<br>Frequency Mode: Hosts functions<br>Avg Frequency: 0.72 gigs/month<br>Total Capacity: 5464<br>Avg Capacity: 210', '<b>Manningham City Council</b><br>Venues: 15<br>Frequency Mode: Hosts functions<br>Avg Frequency: 0.43 gigs/month<br>Total Capacity: 4931<br>Avg Capacity: 328', '<b>Mansfield Shire Council</b><br>Venues: 19<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.38 gigs/month<br>Total Capacity: 6359<br>Avg Capacity: 334', '<b>Maribyrnong City Council</b><br>Venues: 41<br>Frequency Mode: Hosts functions<br>Avg Frequency: 2.16 gigs/month<br>Total Capacity: 10069<br>Avg Capacity: 245', '<b>Maroondah City Council</b><br>Venues: 19<br>Frequency Mode: Hosts functions<br>Avg Frequency: 3.47 gigs/month<br>Total Capacity: 7375<br>Avg Capacity: 388', '<b>Melbourne City Council</b><br>Venues: 230<br>Frequency Mode: 1 or more a week<br>Avg Frequency: 3.00 gigs/month<br>Total Capacity: 168257<br>Avg Capacity: 731', '<b>Melton City Council</b><br>Venues: 5<br>Frequency Mode: 1 or more a week<br>Avg Frequency: 2.20 gigs/month<br>Total Capacity: 1417<br>Avg Capacity: 283', '<b>Merri-Bek City Council</b><br>Venues: 76<br>Frequency Mode: Hosts functions<br>Avg Frequency: 3.99 gigs/month<br>Total Capacity: 18882<br>Avg Capacity: 248', '<b>Mildura Rural City Council</b><br>Venues: 27<br>Frequency Mode: Hosts functions<br>Avg Frequency: 2.09 gigs/month<br>Total Capacity: 7344<br>Avg Capacity: 272', '<b>Mitchell Shire Council</b><br>Venues: 22<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.17 gigs/month<br>Total Capacity: 5517<br>Avg Capacity: 250', '<b>Moira Shire Council</b><br>Venues: 20<br>Frequency Mode: Less than 1 a month<br>Avg Frequency: 0.92 gigs/month<br>Total Capacity: 4679<br>Avg Capacity: 233', '<b>Monash City Council</b><br>Venues: 26<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.16 gigs/month<br>Total Capacity: 11858<br>Avg Capacity: 456', '<b>Moonee Valley City Council</b><br>Venues: 33<br>Frequency Mode: Hosts functions<br>Avg Frequency: 2.00 gigs/month<br>Total Capacity: 8885<br>Avg Capacity: 269', '<b>Moorabool Shire Council</b><br>Venues: 17<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.73 gigs/month<br>Total Capacity: 2619<br>Avg Capacity: 154', '<b>Mornington Peninsula Shire Council</b><br>Venues: 83<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.71 gigs/month<br>Total Capacity: 30239<br>Avg Capacity: 364', '<b>Mount Alexander Shire Council</b><br>Venues: 20<br>Frequency Mode: Less than 1 a month<br>Avg Frequency: 2.71 gigs/month<br>Total Capacity: 2603<br>Avg Capacity: 130', '<b>Moyne Shire Council</b><br>Venues: 19<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.50 gigs/month<br>Total Capacity: 2983<br>Avg Capacity: 157', '<b>Murrindindi Shire Council</b><br>Venues: 15<br>Frequency Mode: Hosts functions<br>Avg Frequency: 3.27 gigs/month<br>Total Capacity: 3833<br>Avg Capacity: 255', '<b>Nillumbik Shire Council</b><br>Venues: 11<br>Frequency Mode: 1 or more a week<br>Avg Frequency: 3.79 gigs/month<br>Total Capacity: 2533<br>Avg Capacity: 230', '<b>Northern Grampians Shire Council</b><br>Venues: 15<br>Frequency Mode: Hosts functions<br>Avg Frequency: 0.49 gigs/month<br>Total Capacity: 2050<br>Avg Capacity: 136', '<b>Port Phillip City Council</b><br>Venues: 91<br>Frequency Mode: Hosts functions<br>Avg Frequency: 3.30 gigs/month<br>Total Capacity: 29627<br>Avg Capacity: 325', '<b>Pyrenees Shire Council</b><br>Venues: 11<br>Frequency Mode: Hosts functions<br>Avg Frequency: 0.85 gigs/month<br>Total Capacity: 1318<br>Avg Capacity: 119', '<b>Queenscliffe Borough Council</b><br>Venues: 9<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.06 gigs/month<br>Total Capacity: 830<br>Avg Capacity: 92', '<b>South Gippsland Shire Council</b><br>Venues: 23<br>Frequency Mode: Hosts functions<br>Avg Frequency: 0.83 gigs/month<br>Total Capacity: 3581<br>Avg Capacity: 155', '<b>Southern Grampians Shire Council</b><br>Venues: 16<br>Frequency Mode: Hosts functions<br>Avg Frequency: 0.63 gigs/month<br>Total Capacity: 2771<br>Avg Capacity: 173', '<b>Stonnington City Council</b><br>Venues: 82<br>Frequency Mode: Hosts functions<br>Avg Frequency: 3.38 gigs/month<br>Total Capacity: 19956<br>Avg Capacity: 243', '<b>Strathbogie Shire Council</b><br>Venues: 12<br>Frequency Mode: Less than 1 a month<br>Avg Frequency: 0.21 gigs/month<br>Total Capacity: 2235<br>Avg Capacity: 186', '<b>Surf Coast Shire Council</b><br>Venues: 28<br>Frequency Mode: Hosts functions<br>Avg Frequency: 2.05 gigs/month<br>Total Capacity: 11173<br>Avg Capacity: 399', '<b>Swan Hill Rural City Council</b><br>Venues: 10<br>Frequency Mode: Less than 1 a month<br>Avg Frequency: 1.50 gigs/month<br>Total Capacity: 3568<br>Avg Capacity: 356', '<b>Towong Shire Council</b><br>Venues: 9<br>Frequency Mode: Hosts functions<br>Avg Frequency: 2.47 gigs/month<br>Total Capacity: 1736<br>Avg Capacity: 192', '<b>Wangaratta Rural City Council</b><br>Venues: 5<br>Frequency Mode: No Data<br>Avg Frequency: 3.20 gigs/month<br>Total Capacity: 453<br>Avg Capacity: 90', '<b>Warrnambool City Council</b><br>Venues: 16<br>Frequency Mode: Hosts functions<br>Avg Frequency: 2.73 gigs/month<br>Total Capacity: 5996<br>Avg Capacity: 374', '<b>Wellington Shire Council</b><br>Venues: 30<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.35 gigs/month<br>Total Capacity: 6087<br>Avg Capacity: 202', '<b>West Wimmera Shire Council</b><br>Venues: 3<br>Frequency Mode: Hosts functions<br>Avg Frequency: 0.40 gigs/month<br>Total Capacity: 618<br>Avg Capacity: 206', '<b>Whitehorse City Council</b><br>Venues: 14<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.14 gigs/month<br>Total Capacity: 8372<br>Avg Capacity: 598', '<b>Whittlesea City Council</b><br>Venues: 11<br>Frequency Mode: Hosts functions<br>Avg Frequency: 2.04 gigs/month<br>Total Capacity: 6956<br>Avg Capacity: 632', '<b>Wodonga City Council</b><br>Venues: 10<br>Frequency Mode: Less than 1 a month<br>Avg Frequency: 3.13 gigs/month<br>Total Capacity: 3780<br>Avg Capacity: 378', '<b>Wyndham City Council</b><br>Venues: 23<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.77 gigs/month<br>Total Capacity: 8796<br>Avg Capacity: 382', '<b>Yarra City Council</b><br>Venues: 141<br>Frequency Mode: Hosts functions<br>Avg Frequency: 3.96 gigs/month<br>Total Capacity: 32841<br>Avg Capacity: 232', '<b>Yarra Ranges Shire Council</b><br>Venues: 70<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.66 gigs/month<br>Total Capacity: 25151<br>Avg Capacity: 359', '<b>Yarriambiack Shire Council</b><br>Venues: 8<br>Frequency Mode: Hosts functions<br>Avg Frequency: 1.30 gigs/month<br>Total Capacity: 1062<br>Avg Capacity: 132'];
+        const lgaNames = ['Alpine Shire Council', 'Ararat Rural City Council', 'Ballarat City Council', 'Banyule City Council', 'Bass Coast Shire Council', 'Baw Baw Shire Council', 'Bayside City Council', 'Benalla Rural City Council', 'Boroondara City Council', 'Brimbank City Council', 'Buloke Shire Council', 'Campaspe Shire Council', 'Cardinia Shire Council', 'Casey City Council', 'Central Goldfields Shire Council', 'Colac-Otway Shire Council', 'Corangamite Shire Council', 'Darebin City Council', 'East Gippsland Shire Council', 'Frankston City Council', 'Gannawarra Shire Council', 'Glen Eira City Council', 'Glenelg Shire Council', 'Golden Plains Shire Council', 'Greater Bendigo City Council', 'Greater Dandenong City Council', 'Greater Geelong City Council', 'Greater Shepparton City Council', 'Hepburn Shire Council', 'Hindmarsh Shire Council', 'Hobsons Bay City Council', 'Horsham Rural City Council', 'Hume City Council', 'Indigo Shire Council', 'Kingston City Council', 'Knox City Council', 'Latrobe City Council', 'Loddon Shire Council', 'Macedon Ranges Shire Council', 'Manningham City Council', 'Mansfield Shire Council', 'Maribyrnong City Council', 'Maroondah City Council', 'Melbourne City Council', 'Melton City Council', 'Merri-Bek City Council', 'Mildura Rural City Council', 'Mitchell Shire Council', 'Moira Shire Council', 'Monash City Council', 'Moonee Valley City Council', 'Moorabool Shire Council', 'Mornington Peninsula Shire Council', 'Mount Alexander Shire Council', 'Moyne Shire Council', 'Murrindindi Shire Council', 'Nillumbik Shire Council', 'Northern Grampians Shire Council', 'Port Phillip City Council', 'Pyrenees Shire Council', 'Queenscliffe Borough Council', 'South Gippsland Shire Council', 'Southern Grampians Shire Council', 'Stonnington City Council', 'Strathbogie Shire Council', 'Surf Coast Shire Council', 'Swan Hill Rural City Council', 'Towong Shire Council', 'Wangaratta Rural City Council', 'Warrnambool City Council', 'Wellington Shire Council', 'West Wimmera Shire Council', 'Whitehorse City Council', 'Whittlesea City Council', 'Wodonga City Council', 'Wyndham City Council', 'Yarra City Council', 'Yarra Ranges Shire Council', 'Yarriambiack Shire Council'];
+        
+        // Create the basic scatter plot
+        const trace = {
+            x: x,
+            y: y,
+            mode: 'markers',
+            marker: {
+                size: sizes,
+                color: colors,
+                colorscale: 'Viridis',
+                colorbar: {
+                    title: 'Avg Venue Capacity'
+                },
+                line: {
+                    color: 'darkgray',
+                    width: 1
+                }
+            },
+            text: text,
+            hoverinfo: 'text',
+            type: 'scatter'
+        };
+        
+        // Layout configuration
+        const layout = {
+            title: 'Interactive Bubble Chart: Number of Venues vs. Average Frequency by LGA<br>Bubble Size = Total Venue Capacity',
+            xaxis: {
+                title: 'Number of Venues per LGA',
+                gridcolor: 'rgba(200, 200, 200, 0.5)'
+            },
+            yaxis: {
+                title: 'Average Frequency of Music Presentation (Gigs per Month)',
+                gridcolor: 'rgba(200, 200, 200, 0.5)'
+            },
+            plot_bgcolor: 'rgba(240, 240, 240, 0.5)',
+            hoverlabel: {
+                bgcolor: 'white',
+                font: {size: 12, family: 'Arial'}
+            },
+            shapes: [{
+                type: 'line',
+                x0: 0,
+                y0: 1.7123354937566047,
+                x1: 241.5,
+                y1: 1.7123354937566047,
+                line: {
+                    color: 'red',
+                    width: 1,
+                    dash: 'dash'
+                }
+            }],
+            annotations: [{
+                x: 241.5 * 0.98,
+                y: 1.7123354937566047 * 1.05,
+                text: 'Average frequency: 1.71 gigs/month',
+                showarrow: false,
+                font: {size: 12, color: 'red'}
+            }]
+        };
+        
+        // Initialize the plot
+        Plotly.newPlot('plotly-div', [trace], layout);
+        
+        // Add dropdown functionality
+        document.getElementById('lga-select').addEventListener('change', function() {
+            const selectedLGA = this.value;
+            
+            if (selectedLGA === 'all') {
+                // Reset all points to full opacity
+                Plotly.restyle('plotly-div', {
+                    'marker.opacity': 1,
+                    'marker.line.color': 'darkgray',
+                    'marker.line.width': 1
+                });
+            } else {
+                // Create arrays for opacity and line properties
+                const opacity = [];
+                const lineColors = [];
+                const lineWidths = [];
+                
+                for (let i = 0; i < lgaNames.length; i++) {
+                    if (lgaNames[i] === selectedLGA) {
+                        opacity.push(1);  // Full opacity for selected
+                        lineColors.push('red');  // Red border
+                        lineWidths.push(3);  // Thicker border
+                    } else {
+                        opacity.push(0.3);  // Dim others
+                        lineColors.push('darkgray');  // Normal border
+                        lineWidths.push(1);  // Normal width
+                    }
+                }
+                
+                // Update the plot
+                Plotly.restyle('plotly-div', {
+                    'marker.opacity': [opacity],
+                    'marker.line.color': [lineColors],
+                    'marker.line.width': [lineWidths]
+                });
+            }
+        });
+    </script>
+</body>
+</html>

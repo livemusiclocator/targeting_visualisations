@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive LGA Venues Chart</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="encoded_data.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; }
+        .container { max-width: 1400px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        .controls { margin-bottom: 20px; padding: 15px; background-color: #eef; border-radius: 5px; border: 1px solid #cce; display: flex; align-items: center; gap: 15px; }
+        .controls label { font-weight: bold; }
+        .controls input { width: 80px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .controls button { padding: 8px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .controls button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LGA League Table: Number of Venues</h1>
+        <div class="controls">
+            <label for="min-venues">Filter by Number of Venues:</label>
+            <input type="number" id="min-venues" placeholder="Min" value="0">
+            <span>-</span>
+            <input type="number" id="max-venues" placeholder="Max">
+            <button id="filter-btn">Apply Filter</button>
+        </div>
+        <div id="lga-chart"></div>
+    </div>
+
+    <script>
+        const chartDiv = document.getElementById('lga-chart');
+        const minInput = document.getElementById('min-venues');
+        const maxInput = document.getElementById('max-venues');
+        const filterBtn = document.getElementById('filter-btn');
+
+        let allLgaData = [];
+
+        // Function to draw/update the chart
+        function drawChart(data) {
+            const sortedData = data.sort((a, b) => +b.number_of_venues - +a.number_of_venues);
+
+            const trace = {
+                y: sortedData.map(row => row.LGA),
+                x: sortedData.map(row => +row.number_of_venues),
+                type: 'bar',
+                orientation: 'h',
+                text: sortedData.map(row => +row.number_of_venues),
+                textposition: 'inside',
+                insidetextanchor: 'middle',
+                marker: {
+                    color: '#346beb'
+                },
+                hoverinfo: 'y+x',
+                hovertemplate: '<b>%{y}</b><br>Venues: %{x}<extra></extra>'
+            };
+
+            const layout = {
+                title: `Showing ${sortedData.length} LGAs`,
+                height: Math.max(600, sortedData.length * 25),
+                yaxis: { automargin: true },
+                xaxis: { title: 'Number of Venues' }
+            };
+
+            Plotly.react(chartDiv, [trace], layout);
+        }
+
+        // --- Main Data Loading and Event Handling ---
+        // Decode the data from the encodedData object
+        const encodedString = encodedData['lga_league_table.csv'];
+        const decodedCsvString = atob(encodedString);
+        
+        // Parse the decoded CSV string
+        allLgaData = Plotly.d3.csv.parse(decodedCsvString);
+
+        // Set initial max value in placeholder and draw chart
+        const maxVenues = Math.max(...allLgaData.map(row => +row.number_of_venues));
+        maxInput.placeholder = `Max (${maxVenues})`;
+        drawChart(allLgaData);
+
+        // Add filter functionality
+        filterBtn.addEventListener('click', () => {
+            const minVal = parseFloat(minInput.value) || 0;
+            const maxVal = parseFloat(maxInput.value) || Infinity;
+
+            const filteredData = allLgaData.filter(row => {
+                const venueCount = +row.number_of_venues;
+                return venueCount >= minVal && venueCount <= maxVal;
+            });
+            
+            drawChart(filteredData);
+        });
+    </script>
+</body>
+</html>

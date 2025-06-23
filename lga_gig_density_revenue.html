@@ -1,0 +1,359 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LGA Gig Density vs Revenue Analysis</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f0f0ff;
+            border-radius: 8px;
+            border: 2px solid #ccccff;
+        }
+        select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #aaa;
+            font-size: 14px;
+            min-width: 300px;
+            background-color: #fff;
+        }
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        .highlight-info {
+            font-style: italic;
+            margin-top: 10px;
+            color: #555;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .metrics-selector {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LGA Gig Density vs Revenue Analysis</h1>
+        <div class="controls">
+            <label for="lga-select">Select LGA to Highlight:</label>
+            <select id="lga-select">
+                <option value="all">-- All LGAs --</option>
+                <option value="Alpine Shire Council">Alpine Shire Council</option>
+                <option value="Ararat Rural City Council">Ararat Rural City Council</option>
+                <option value="Ballarat City Council">Ballarat City Council</option>
+                <option value="Banyule City Council">Banyule City Council</option>
+                <option value="Bass Coast Shire Council">Bass Coast Shire Council</option>
+                <option value="Baw Baw Shire Council">Baw Baw Shire Council</option>
+                <option value="Bayside City Council">Bayside City Council</option>
+                <option value="Benalla Rural City Council">Benalla Rural City Council</option>
+                <option value="Boroondara City Council">Boroondara City Council</option>
+                <option value="Brimbank City Council">Brimbank City Council</option>
+            </select>
+            <button id="highlight-btn">Highlight Selected LGA</button>
+            
+            <div class="metrics-selector">
+                <label for="x-metric">X-Axis:</label>
+                <select id="x-metric">
+                    <option value="venues_per_10k">Venues Per 10,000 Population</option>
+                    <option value="frequency_weighted">Frequency-Weighted Venue Density</option>
+                    <option value="capacity_per_pop">Venue Capacity Per Population</option>
+                    <option value="venue_count">Venue Count</option>
+                </select>
+                
+                <label for="y-metric" style="margin-left: 20px;">Y-Axis:</label>
+                <select id="y-metric">
+                    <option value="revenue_per_capita">Revenue Per Capita</option>
+                    <option value="total_revenue">Total Revenue</option>
+                </select>
+                
+                <button id="update-metrics-btn" style="margin-left: 10px;">Update Chart</button>
+            </div>
+            
+            <div class="highlight-info">
+                Select metrics to compare and highlight specific LGAs. Bubble size represents average venue capacity.
+            </div>
+        </div>
+        <div id="chart" style="width: 100%; height: 800px;"></div>
+    </div>
+
+    <script>
+        // Data for the plot
+        const lgas = ['Alpine Shire Council', 'Ararat Rural City Council', 'Ballarat City Council', 'Banyule City Council', 'Bass Coast Shire Council', 'Baw Baw Shire Council', 'Bayside City Council', 'Benalla Rural City Council', 'Boroondara City Council', 'Brimbank City Council'];
+        const venueCount = [30, 8, 71, 17, 38, 34, 29, 3, 16, 26];
+        const avgFrequency = [1.9833333333333334, 0.35, 2.1253521126760564, 1.6764705882352942, 1.5815789473684212, 1.1029411764705883, 1.396551724137931, 0.06666666666666667, 2.29375, 1.0961538461538463];
+        const totalCapacity = [6856.0, 2607.0, 18514.0, 5474.0, 8139.0, 9711.0, 5004.0, 500.0, 5220.0, 11442.0];
+        const avgCapacity = [228.53333333333333, 325.875, 260.76056338028167, 322.0, 214.18421052631578, 285.61764705882354, 172.55172413793105, 166.66666666666666, 326.25, 440.0769230769231];
+        const population = [13182, 11683, 118137, 129602, 42729, 60644, 104272, 14529, 174537, 196046];
+        const totalRevenue = [41100000, 36600000, 273300000, 173200000, 116500000, 147800000, 173200000, 39300000, 253900000, 243500000];
+        const venuesPer10k = [22.75830678197542, 6.847556278353163, 6.009971473797371, 1.3117081526519654, 8.893257506611434, 5.606490337049007, 2.7811876630351393, 2.0648358455502787, 0.916711069859113, 1.3262193566815952];
+        const revenuePerCapita = [3117.8880291306327, 3132.756997346572, 2313.4157799842556, 1336.399129643061, 2726.4855250532423, 2437.1743288701273, 1661.040355992021, 2704.934957670865, 1454.70587898268, 1242.0554359691093];
+        const capacityPerPop = [0.520103170990745, 0.2231447402208337, 0.15671635474068243, 0.04223700251539328, 0.19047953380608018, 0.1601312578325968, 0.047989872640785636, 0.03441393075917131, 0.02990769865415356, 0.05836385338134927];
+        const frequencyWeighted = [45.13730845091792, 2.3966446974236066, 12.773305568958074, 2.199040138269471, 14.065388845982824, 6.183629048215817, 3.8840724259628665, 0.13765572303668525, 2.1027060164893405, 1.4537404486702101];
+        
+        // Create the data with custom hover text
+        function createHoverText(i) {
+            const formattedRevenue = totalRevenue[i].toLocaleString('en-AU', {
+                style: 'currency',
+                currency: 'AUD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+            
+            const formattedRevenuePerCapita = revenuePerCapita[i].toLocaleString('en-AU', {
+                style: 'currency',
+                currency: 'AUD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+            
+            return `<b>${lgas[i]}</b><br>` +
+                   `Population: ${population[i].toLocaleString()}<br>` +
+                   `Venues: ${venueCount[i]}<br>` +
+                   `Venues Per 10k Pop: ${venuesPer10k[i].toFixed(2)}<br>` +
+                   `Avg Frequency: ${avgFrequency[i].toFixed(2)} gigs/month<br>` +
+                   `Frequency-Weighted Density: ${frequencyWeighted[i].toFixed(2)}<br>` +
+                   `Total Revenue: ${formattedRevenue}<br>` +
+                   `Revenue Per Capita: ${formattedRevenuePerCapita}`;
+        }
+        
+        // Get X and Y values based on selected metrics
+        function getMetricValues() {
+            const xMetric = document.getElementById('x-metric').value;
+            const yMetric = document.getElementById('y-metric').value;
+            
+            let xValues, yValues, xTitle, yTitle;
+            
+            // X-axis metric
+            switch(xMetric) {
+                case 'venues_per_10k':
+                    xValues = venuesPer10k;
+                    xTitle = 'Venues Per 10,000 Population';
+                    break;
+                case 'frequency_weighted':
+                    xValues = frequencyWeighted;
+                    xTitle = 'Frequency-Weighted Venue Density';
+                    break;
+                case 'capacity_per_pop':
+                    xValues = capacityPerPop;
+                    xTitle = 'Venue Capacity Per Population';
+                    break;
+                case 'venue_count':
+                    xValues = venueCount;
+                    xTitle = 'Venue Count';
+                    break;
+                default:
+                    xValues = venuesPer10k;
+                    xTitle = 'Venues Per 10,000 Population';
+            }
+            
+            // Y-axis metric
+            switch(yMetric) {
+                case 'revenue_per_capita':
+                    yValues = revenuePerCapita;
+                    yTitle = 'Revenue Per Capita (AUD)';
+                    break;
+                case 'total_revenue':
+                    yValues = totalRevenue;
+                    yTitle = 'Total Revenue (AUD)';
+                    break;
+                default:
+                    yValues = revenuePerCapita;
+                    yTitle = 'Revenue Per Capita (AUD)';
+            }
+            
+            return { xValues, yValues, xTitle, yTitle };
+        }
+        
+        // Function to create the plot with all LGAs
+        function createPlot() {
+            const metrics = getMetricValues();
+            const hoverTexts = [];
+            
+            for (let i = 0; i < lgas.length; i++) {
+                hoverTexts.push(createHoverText(i));
+            }
+            
+            // Calculate bubble sizes based on average capacity
+            const maxCapacity = Math.max(...avgCapacity);
+            const bubbleSizes = avgCapacity.map(cap => Math.max(Math.sqrt(cap / maxCapacity) * 30, 8));
+            
+            const trace = {
+                x: metrics.xValues,
+                y: metrics.yValues,
+                mode: 'markers',
+                type: 'scatter',
+                text: hoverTexts,
+                hoverinfo: 'text',
+                marker: {
+                    size: bubbleSizes,
+                    color: avgFrequency,
+                    colorscale: 'Viridis',
+                    colorbar: {
+                        title: 'Avg Gigs<br>Per Month'
+                    },
+                    line: {
+                        width: 1,
+                        color: 'darkgray'
+                    }
+                }
+            };
+            
+            const layout = {
+                title: 'LGA Gig Density vs Revenue Analysis<br>Bubble Size = Average Venue Capacity',
+                xaxis: {
+                    title: metrics.xTitle,
+                    gridcolor: 'rgba(200, 200, 200, 0.5)'
+                },
+                yaxis: {
+                    title: metrics.yTitle,
+                    gridcolor: 'rgba(200, 200, 200, 0.5)'
+                },
+                plot_bgcolor: 'rgba(240, 240, 240, 0.5)',
+                hoverlabel: {
+                    bgcolor: 'white',
+                    font: {
+                        family: 'Arial',
+                        size: 12
+                    },
+                    bordercolor: 'gray'
+                }
+            };
+            
+            Plotly.newPlot('chart', [trace], layout);
+        }
+        
+        // Function to highlight a specific LGA
+        function highlightLGA(selectedLGA) {
+            if (selectedLGA === 'all') {
+                // Show all LGAs normally
+                createPlot();
+                return;
+            }
+            
+            // Find the index of the selected LGA
+            const lgaIndex = lgas.indexOf(selectedLGA);
+            if (lgaIndex === -1) return;
+            
+            const metrics = getMetricValues();
+            
+            // Create hover texts
+            const hoverTexts = [];
+            for (let i = 0; i < lgas.length; i++) {
+                hoverTexts.push(createHoverText(i));
+            }
+            
+            // Calculate bubble sizes based on average capacity
+            const maxCapacity = Math.max(...avgCapacity);
+            const bubbleSizes = avgCapacity.map(cap => Math.max(Math.sqrt(cap / maxCapacity) * 30, 8));
+            const highlightedSizes = [...bubbleSizes];
+            highlightedSizes[lgaIndex] = Math.max(bubbleSizes[lgaIndex] * 1.5, 15); // Make highlighted bubble larger
+            
+            // Create a trace for all LGAs
+            const trace = {
+                x: metrics.xValues,
+                y: metrics.yValues,
+                mode: 'markers',
+                type: 'scatter',
+                text: hoverTexts,
+                hoverinfo: 'text',
+                marker: {
+                    size: highlightedSizes,
+                    color: Array(lgas.length).fill('rgba(100, 100, 100, 0.3)'), // All dimmed
+                    line: {
+                        width: Array(lgas.length).fill(1),
+                        color: Array(lgas.length).fill('darkgray')
+                    }
+                }
+            };
+            
+            // Override properties for the highlighted LGA
+            trace.marker.color[lgaIndex] = 'rgba(255, 0, 0, 1)'; // Bright red
+            trace.marker.line.width[lgaIndex] = 3;
+            trace.marker.line.color[lgaIndex] = 'black';
+            
+            const layout = {
+                title: `LGA Gig Density vs Revenue Analysis: ${selectedLGA} Highlighted<br>Bubble Size = Average Venue Capacity`,
+                xaxis: {
+                    title: metrics.xTitle,
+                    gridcolor: 'rgba(200, 200, 200, 0.5)'
+                },
+                yaxis: {
+                    title: metrics.yTitle,
+                    gridcolor: 'rgba(200, 200, 200, 0.5)'
+                },
+                plot_bgcolor: 'rgba(240, 240, 240, 0.5)',
+                hoverlabel: {
+                    bgcolor: 'white',
+                    font: {
+                        family: 'Arial',
+                        size: 12
+                    },
+                    bordercolor: 'gray'
+                }
+            };
+            
+            Plotly.newPlot('chart', [trace], layout);
+        }
+        
+        // Initialize the plot
+        createPlot();
+        
+        // Handle the highlight button click
+        document.getElementById('highlight-btn').addEventListener('click', function() {
+            const selectedLGA = document.getElementById('lga-select').value;
+            highlightLGA(selectedLGA);
+        });
+        
+        // Also highlight when selecting from dropdown
+        document.getElementById('lga-select').addEventListener('change', function() {
+            const selectedLGA = this.value;
+            highlightLGA(selectedLGA);
+        });
+        
+        // Update the chart when metrics change
+        document.getElementById('update-metrics-btn').addEventListener('click', function() {
+            const selectedLGA = document.getElementById('lga-select').value;
+            if (selectedLGA === 'all') {
+                createPlot();
+            } else {
+                highlightLGA(selectedLGA);
+            }
+        });
+    </script>
+</body>
+</html>
