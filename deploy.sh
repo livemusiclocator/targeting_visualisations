@@ -28,17 +28,8 @@ echo "--- Staging all permitted files... ---"
 git add .
 
 # Step 5: Commit the files.
-# We will amend the last commit if it was empty, or create a new one.
 echo "--- Committing files... ---"
-# Check if the last commit was empty.
-if [ -z "$(git log -1 --pretty=%B)" ]; then
-    git commit --amend -m "Initial commit: Add interactive visualizations and data"
-else
-    # If there are staged changes, create a new commit.
-    # If not, this will do nothing.
-    git commit -m "Update visualizations and deployment assets"
-fi
-
+git commit -m "Deploying interactive visualizations" --allow-empty
 
 # Step 6: Connect this local repository to your GitHub repository.
 echo "--- Setting up remote repository connection... ---"
@@ -51,6 +42,7 @@ git remote add origin "https://github.com/${GITHUB_USERNAME}/${REPO_NAME}.git"
 # The -f flag forces the push, which is useful for overwriting a
 # repository's history, as needed for this initial setup.
 echo "--- Pushing files to GitHub... ---"
+echo "--- IMPORTANT: Please enter your GitHub credentials if prompted. ---"
 git push -u -f origin main
 
 echo "--- Deployment Complete! ---"
