@@ -1,0 +1,20 @@
+# Ignore Python cache and runtime files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore Virtual Environments
+.env
+.venv
+env/
+venv/
+
+# Ignore data files to keep them private
+*.csv
+
+# Ignore Python scripts used for generation
+*.py
+
+# Ignore OS-specific files
+.DS_Store
